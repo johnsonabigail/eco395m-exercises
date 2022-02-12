@@ -45,18 +45,67 @@ can better understand top songs, musical diversity, and long-run hits.
 
 #### Top 10 Songs on Billboard Top 100 by Total Number of Weeks
 
-| **Performer**                             | **Song**                            | **Count** |
-|-------------------------------------------|-------------------------------------|-----------|
-| Imagine Dragons                           | Radioactive                         | 87        |
-| AWOLNATION                                | Sail                                | 79        |
-| Jason Mraz                                | Im Yours                            | 76        |
-| The Weeknd                                | Blinding Lights                     | 76        |
-| LeAnn Rimes                               | How Do I Live                       | 69        |
-| LMFAO Featuring Lauren Bennett & GoonRock | Party Rock Anthem                   | 68        |
-| OneRepublic                               | Counting Stars                      | 68        |
-| Adele                                     | Rolling In The Deep                 | 65        |
-| Jewel                                     | Foolish Games/You Were Meant For Me | 65        |
-| Carrie Underwood                          | Before He Cheats                    | 64        |
+<table>
+<thead>
+<tr class="header">
+<th><strong>Performer</strong></th>
+<th><strong>Song</strong></th>
+<th><strong>Count</strong></th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>Imagine Dragons</td>
+<td>Radioactive</td>
+<td>87</td>
+</tr>
+<tr class="even">
+<td>AWOLNATION</td>
+<td>Sail</td>
+<td>79</td>
+</tr>
+<tr class="odd">
+<td>Jason Mraz</td>
+<td>Im Yours</td>
+<td>76</td>
+</tr>
+<tr class="even">
+<td>The Weeknd</td>
+<td>Blinding Lights</td>
+<td>76</td>
+</tr>
+<tr class="odd">
+<td>LeAnn Rimes</td>
+<td>How Do I Live</td>
+<td>69</td>
+</tr>
+<tr class="even">
+<td>LMFAO Featuring Lauren Bennett &amp; GoonRock</td>
+<td>Party Rock Anthem</td>
+<td>68</td>
+</tr>
+<tr class="odd">
+<td>OneRepublic</td>
+<td>Counting Stars</td>
+<td>68</td>
+</tr>
+<tr class="even">
+<td>Adele</td>
+<td>Rolling In The Deep</td>
+<td>65</td>
+</tr>
+<tr class="odd">
+<td>Jewel</td>
+<td>Foolish Games/You Were Meant For Me</td>
+<td>65</td>
+</tr>
+<tr class="even">
+<td>Carrie Underwood</td>
+<td>Before He Cheats</td>
+<td>64</td>
+</tr>
+</tbody>
+</table>
 
 <br> The number one song is Radioactive by Imagine Dragons with 87 total
 weeks spent on the Billboard Top 100. Coming in at number ten is Before
@@ -95,35 +144,124 @@ Athletics events**
 
 <br>
 
-| **Event**                                   | **95th Percentile** |
-|---------------------------------------------|---------------------|
-| Athletics Women’s 1,500 metres              | 172.00              |
-| Athletics Women’s 10 kilometres Walk        | 170.00              |
-| Athletics Women’s 10,000 metres             | 167.80              |
-| Athletics Women’s 100 metres                | 179.60              |
-| Athletics Women’s 100 metres Hurdles        | 176.00              |
-| Athletics Women’s 20 kilometres Walk        | 173.00              |
-| Athletics Women’s 200 metres                | 180.00              |
-| Athletics Women’s 3,000 metres              | 170.00              |
-| Athletics Women’s 3,000 metres Steeplechase | 176.80              |
-| Athletics Women’s 4 x 100 metres Relay      | 176.00              |
-| Athletics Women’s 4 x 400 metres Relay      | 178.00              |
-| Athletics Women’s 400 metres                | 180.00              |
-| Athletics Women’s 400 metres Hurdles        | 181.40              |
-| Athletics Women’s 5,000 metres              | 170.75              |
-| Athletics Women’s 80 metres Hurdles         | 174.80              |
-| Athletics Women’s 800 metres                | 175.75              |
-| Athletics Women’s Discus Throw              | 188.40              |
-| Athletics Women’s Hammer Throw              | 183.90              |
-| Athletics Women’s Heptathlon                | 188.70              |
-| Athletics Women’s High Jump                 | 188.00              |
-| Athletics Women’s Javelin Throw             | 186.20              |
-| Athletics Women’s Long Jump                 | 181.35              |
-| Athletics Women’s Marathon                  | 171.40              |
-| Athletics Women’s Pentathlon                | 179.00              |
-| Athletics Women’s Pole Vault                | 183.00              |
-| Athletics Women’s Shot Put                  | 191.50              |
-| Athletics Women’s Triple Jump               | 186.90              |
+<table>
+<thead>
+<tr class="header">
+<th><strong>Event</strong></th>
+<th><strong>95th Percentile</strong></th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>Athletics Women’s 1,500 metres</td>
+<td>172.00</td>
+</tr>
+<tr class="even">
+<td>Athletics Women’s 10 kilometres Walk</td>
+<td>170.00</td>
+</tr>
+<tr class="odd">
+<td>Athletics Women’s 10,000 metres</td>
+<td>167.80</td>
+</tr>
+<tr class="even">
+<td>Athletics Women’s 100 metres</td>
+<td>179.60</td>
+</tr>
+<tr class="odd">
+<td>Athletics Women’s 100 metres Hurdles</td>
+<td>176.00</td>
+</tr>
+<tr class="even">
+<td>Athletics Women’s 20 kilometres Walk</td>
+<td>173.00</td>
+</tr>
+<tr class="odd">
+<td>Athletics Women’s 200 metres</td>
+<td>180.00</td>
+</tr>
+<tr class="even">
+<td>Athletics Women’s 3,000 metres</td>
+<td>170.00</td>
+</tr>
+<tr class="odd">
+<td>Athletics Women’s 3,000 metres Steeplechase</td>
+<td>176.80</td>
+</tr>
+<tr class="even">
+<td>Athletics Women’s 4 x 100 metres Relay</td>
+<td>176.00</td>
+</tr>
+<tr class="odd">
+<td>Athletics Women’s 4 x 400 metres Relay</td>
+<td>178.00</td>
+</tr>
+<tr class="even">
+<td>Athletics Women’s 400 metres</td>
+<td>180.00</td>
+</tr>
+<tr class="odd">
+<td>Athletics Women’s 400 metres Hurdles</td>
+<td>181.40</td>
+</tr>
+<tr class="even">
+<td>Athletics Women’s 5,000 metres</td>
+<td>170.75</td>
+</tr>
+<tr class="odd">
+<td>Athletics Women’s 80 metres Hurdles</td>
+<td>174.80</td>
+</tr>
+<tr class="even">
+<td>Athletics Women’s 800 metres</td>
+<td>175.75</td>
+</tr>
+<tr class="odd">
+<td>Athletics Women’s Discus Throw</td>
+<td>188.40</td>
+</tr>
+<tr class="even">
+<td>Athletics Women’s Hammer Throw</td>
+<td>183.90</td>
+</tr>
+<tr class="odd">
+<td>Athletics Women’s Heptathlon</td>
+<td>188.70</td>
+</tr>
+<tr class="even">
+<td>Athletics Women’s High Jump</td>
+<td>188.00</td>
+</tr>
+<tr class="odd">
+<td>Athletics Women’s Javelin Throw</td>
+<td>186.20</td>
+</tr>
+<tr class="even">
+<td>Athletics Women’s Long Jump</td>
+<td>181.35</td>
+</tr>
+<tr class="odd">
+<td>Athletics Women’s Marathon</td>
+<td>171.40</td>
+</tr>
+<tr class="even">
+<td>Athletics Women’s Pentathlon</td>
+<td>179.00</td>
+</tr>
+<tr class="odd">
+<td>Athletics Women’s Pole Vault</td>
+<td>183.00</td>
+</tr>
+<tr class="even">
+<td>Athletics Women’s Shot Put</td>
+<td>191.50</td>
+</tr>
+<tr class="odd">
+<td>Athletics Women’s Triple Jump</td>
+<td>186.90</td>
+</tr>
+</tbody>
+</table>
 
 <br> <br>
 
@@ -133,9 +271,20 @@ Athletics events**
 competitor’s heights across the entire history of the Olympics, as
 measured by the standard deviation?** <br>
 
-| **Event**                  | **Standard Deviation** |
-|----------------------------|------------------------|
-| Rowing Women’s Coxed Fours | 10.86549               |
+<table>
+<thead>
+<tr class="header">
+<th><strong>Event</strong></th>
+<th><strong>Standard Deviation</strong></th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>Rowing Women’s Coxed Fours</td>
+<td>10.86549</td>
+</tr>
+</tbody>
+</table>
 
 <br> The Women’s Rowing Coxed Fours has the highest variablity in height
 across women’s single Olympic events. <br> <br>
