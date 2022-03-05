@@ -1,0 +1,296 @@
+---
+title: "Exercises 2"
+author: "Abby Johnson"
+date: "3/4/2022"
+output: md_document
+---
+
+```{r setup, include=FALSE}
+if (!("librarian" %in% rownames(utils::installed.packages()))) {
+  utils::install.packages("librarian")
+}
+librarian::shelf( 
+  cran_repo = "https://cran.microsoft.com/", # Dallas, TX
+  ask = FALSE,
+  stats, # https://stackoverflow.com/questions/26935095/r-dplyr-filter-not-masking-base-filter#answer-26935536
+  here,
+  kableExtra,
+  rlang,
+  ggthemes,
+  tidyverse,
+  janitor,
+  magrittr,
+  glue,
+  lubridate,
+  haven,
+  snakecase,
+  sandwich,
+  lmtest,
+  gganimate,
+  gapminder,
+  stargazer,
+  snakecase,
+  mosaicData,
+  modelr,
+  rsample,
+  foreach,
+  caret,
+  parallel,
+  purrr,
+  pander,
+  readr,
+  xtable
+)
+
+here::i_am("R/include.R")
+
+capmetro_UT <- read_csv(here("data/capmetro_UT.csv"))
+data(SaratogaHouses)
+german_credit <- read_csv(here("data/german_credit.csv"))
+hotels_dev <- read_csv(here("data/hotels_dev.csv"))
+hotels_val <- read_csv(here("data/hotels_val.csv"))
+```
+
+```{r globaloptions, include=FALSE}
+knitr::opts_chunk$set(fig.path = 'figures/')
+```
+
+<br>
+
+### Exercises 2 
+#### Abby Johnson
+#### 3/7/22
+
+<br>
+
+### 1) Data visualization: UT CapMetro Ridership
+
+<br>
+
+```{r capmetro, include=FALSE}
+capmetro_UT = mutate(capmetro_UT,
+                     day_of_week = factor(day_of_week,
+                                          levels=c("Mon", "Tue", "Wed","Thu", "Fri", "Sat", "Sun")),
+                     month = factor(month,
+                                    levels=c("Sep", "Oct","Nov")))
+
+mean_boardings = capmetro_UT %>%
+  group_by(hour_of_day, day_of_week, month)%>%
+  summarize(mean_boardings = mean(boarding))
+
+mean_boardings_line = ggplot(mean_boardings) +
+  geom_line(aes(x=hour_of_day, y=mean_boardings, color=month))+
+  facet_wrap(~day_of_week)+
+  labs(x="Hour",
+       y="Average Boardings",
+       title= "Average Boardings by Time",
+       colour="Month")
+
+capmetro_UT = mutate(capmetro_UT, minute = minute(timestamp))
+
+boardings_per_hour = capmetro_UT %>%
+  group_by(minute, hour_of_day, weekend, temperature)%>%
+  summarize(boardings = sum(boarding))
+
+boardings_per_hour_scatter = ggplot(boardings_per_hour) +
+  geom_point(aes(temperature, boardings, color=weekend))+
+  facet_wrap(~hour_of_day)+
+  labs(x="Temperature",
+       y="Boardings",
+       title = "Boardings by Time and Temperature",
+       colour="Weekend")
+
+```
+
+
+```{r capmetroplot1, echo=FALSE}
+plot(mean_boardings_line)
+```
+
+Give the figure an informative caption in which you explain what is shown in the figure and address the following questions, citing evidence from the figure. Does the hour of peak boardings change from day to day, or is it broadly similar across days? Why do you think average boardings on Mondays in September look lower, compared to other days and months? Similarly, why do you think average boardings on Weds/Thurs/Fri in November look lower?
+
+<br>
+
+```{r capmetroplot2, echo=FALSE}
+plot(boardings_per_hour_scatter)
+```
+
+When we hold hour of day and weekend status constant, does temperature seem to have a noticeable effect on the number of UT students riding the bus?
+
+<br>
+
+### 2) Saratoga House Prices
+
+<br>
+
+```{r saratoga, include=FALSE}
+SaratogaHouses$waterfront <- ifelse(SaratogaHouses$waterfront == 'Yes', 1, 0)
+SaratogaHouses$centralAir <- ifelse(SaratogaHouses$centralAir == 'Yes', 1, 0)
+SaratogaHouses$newConstruction <- ifelse(SaratogaHouses$newConstruction == 'Yes', 1, 0)
+SaratogaHouses$heating_electric <- ifelse(SaratogaHouses$heating == 'electric', 1, 0)
+SaratogaHouses$heating_hotwater <- ifelse(SaratogaHouses$heating == 'hot water/steam', 1, 0)
+SaratogaHouses$heating_hotair <- ifelse(SaratogaHouses$heating == 'hot air', 1, 0)
+SaratogaHouses$fuel_electric <- ifelse(SaratogaHouses$fuel == 'electric', 1, 0)
+SaratogaHouses$fuel_gas <- ifelse(SaratogaHouses$fuel == 'gas', 1, 0)
+SaratogaHouses$fuel_oil <- ifelse(SaratogaHouses$fuel == 'oil', 1, 0)
+SaratogaHouses$sewer_septic <- ifelse(SaratogaHouses$sewer == 'septic', 1, 0)
+SaratogaHouses$sewer_public <- ifelse(SaratogaHouses$sewer == 'public/commercial', 1, 0)
+SaratogaHouses$sewer_none <- ifelse(SaratogaHouses$sewer == 'none', 1, 0)
+
+saratoga_split = initial_split(SaratogaHouses, prop = 0.8)
+saratoga_train = training(saratoga_split)
+saratoga_test = testing(saratoga_split)
+
+K_folds = 10
+SaratogaHouses = SaratogaHouses %>%
+  mutate(fold_id = rep(1:K_folds, length=nrow(SaratogaHouses)) %>% sample)
+
+lm_rmse_cv = foreach(fold = 1:K_folds, .combine='c') %do% {
+  lm = lm(price ~ (. -pctCollege - heating - heating_hotair - fuel - fuel_oil - sewer - sewer_none +(bedrooms*lotSize)),
+  data=filter(SaratogaHouses, fold_id != fold))
+modelr::rmse(lm, data=filter(SaratogaHouses, fold_id == fold))
+}
+
+lm_rmse_cv
+mean(lm_rmse_cv)
+
+SaratogaHouses_standardized = SaratogaHouses %>%
+  mutate(price_s = scale(price), 
+         lotSize_s = scale(lotSize),
+         age_s = scale(age),
+         landValue_s = scale(landValue),
+         livingArea_s = scale(livingArea),
+         pctCollege_s = scale(pctCollege),
+         bedrooms_s = scale(bedrooms),
+         fireplaces_s = scale(fireplaces),
+         bathrooms_s = scale(bathrooms),
+         rooms_s = scale(rooms),
+         waterfront_s = scale(waterfront),
+         newConstruction_s = scale(newConstruction),
+         centralAir_s = scale(centralAir),
+         heating_electric_s = scale(heating_electric),
+         heating_hotwater_s = scale(heating_hotwater),
+         heating_hotair_s = scale(heating_hotair),
+         fuel_electric_s = scale(fuel_electric),
+         fuel_gas_s = scale(fuel_gas),
+         fuel_oil_s = scale(fuel_oil),
+         sewer_septic_s = scale(sewer_septic),
+         sewer_public_s = scale(sewer_public),
+         sewer_none_s = scale(sewer_none))
+
+saratoga_split_s = initial_split(SaratogaHouses_standardized, prop = 0.8)
+saratoga_train_s = training(saratoga_split_s)
+saratoga_test_s = testing(saratoga_split_s)
+
+SaratogaHouses_standardized = SaratogaHouses_standardized %>%
+  mutate(fold_id = rep(1:K_folds, length=nrow(SaratogaHouses_standardized)) %>% sample)
+
+knn_rmse_cv = foreach(fold = 1:K_folds, .combine='c') %do% {
+  knn100 = knnreg(price ~(. -pctCollege - heating_hotair - fuel_oil - sewer_none),
+                  data=filter(SaratogaHouses_standardized, fold_id != fold), k=20)
+  modelr::rmse(knn100, data=filter(SaratogaHouses_standardized, fold_id == fold))
+}
+
+knn_rmse_cv
+mean(knn_rmse_cv)
+```
+
+**Cross-validated RMSE for linear model:**
+```{r lm_rmse, echo=FALSE}
+mean(lm_rmse_cv)
+```
+
+**Cross-validated RMSE for KNN model:**
+```{r knn_rmse, echo=FALSE}
+mean(knn_rmse_cv)
+```
+
+
+Which model seems to do better at achieving lower out-of-sample mean-squared error? Write a report on your findings as if you were describing your price-modeling strategies for a local taxing authority, who needs to form predicted market values for properties in order to know how much to tax them. Keep the main focus on the conclusions and model performance; any relevant technical details should be put in an appendix.
+
+<br>
+
+### 3) Classification and retrospective sampling: German loan defaults
+
+<br>
+
+```{r credit, include=FALSE}
+count_history = german_credit %>%
+  group_by(history)%>%
+  summarize(count=n())
+count_history
+
+count_history_plot = ggplot(count_history)+
+  geom_col(aes(history, count))+
+  labs(x="Credit History",
+       y="Total Loans",
+       title = "Total Loans by Credit History")
+count_history_plot
+
+count_default_history = german_credit %>%
+  filter(Default==1)%>%
+  group_by(history)%>%
+  summarize(count=n())
+count_default_history
+
+count_default_history_plot = ggplot(count_default_history)+
+  geom_col(aes(history, count))+
+  labs(x="Credit History",
+       y="Total Defaulted Loans",
+       title = "Total Defaulted Loans by Credit History")
+count_default_history_plot
+
+
+default_by_history = german_credit %>%
+  group_by(history)%>%
+  summarize(prop_default = ( sum( Default == 1 ) / length( Default ) ))
+default_by_history
+
+prop_default_bar = ggplot(default_by_history) +
+  geom_col(aes(x=history, y=prop_default))+
+  labs( x="Credit History",
+        y = "Probability of Default",
+        title = "Default Probabilty by Credit History")
+prop_default_bar
+
+logit_default = glm(Default ~ duration + amount + installment + age + history + purpose + foreign, data=german_credit, family=binomial)
+coef(logit_default) %>% round(2)
+
+```
+
+```{r credit_propplot, echo=FALSE}
+plot(prop_default_bar)
+```
+
+<br>
+
+```{r logit, echo=FALSE} 
+logit_default %>% 
+  tidy()%>%
+  mutate(
+    term = c("Intercept", "Duration", "Amount", "Installment", "Age", "Poor History", "Terrible History","Education","Goods/Repair","New Car","Used Car", "German"))%>%
+  kable(
+    caption = "**Logit Model Estimates For Predicting Default Probability**",
+    col.names = c("Predictor", "Coefficient", "SE", "Z", "p"),
+    digits = c(0, 2, 2, 2, 3),
+    align = c("l", "r", "r", "r", "r")
+  )
+```
+
+What do you notice about the history variable vis-a-vis predicting defaults? What do you think is going on here? In light of what you see here, do you think this data set is appropriate for building a predictive model of defaults, if the purpose of the model is to screen prospective borrowers to classify them into "high" versus "low" probability of default? Why or why not---and if not, would you recommend any changes to the bank's sampling scheme?
+
+<br>
+
+```{r credit_countplot, echo=FALSE}
+plot(count_history_plot)
+```
+
+Write final caption comments here. 
+
+<br>
+
+### 4) Model building and validation: Children and hotel reservations
+
+<br>
+
+

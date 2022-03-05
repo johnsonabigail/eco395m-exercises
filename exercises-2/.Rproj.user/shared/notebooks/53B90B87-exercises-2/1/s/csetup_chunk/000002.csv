@@ -1,0 +1,95 @@
+"0","if (!(""librarian"" %in% rownames(utils::installed.packages()))) {"
+"0","  utils::install.packages(""librarian"")"
+"0","}"
+"0","librarian::shelf( "
+"0","  cran_repo = ""https://cran.microsoft.com/"", # Dallas, TX"
+"0","  ask = FALSE,"
+"0","  stats, # https://stackoverflow.com/questions/26935095/r-dplyr-filter-not-masking-base-filter#answer-26935536"
+"0","  here,"
+"0","  kableExtra,"
+"0","  rlang,"
+"0","  ggthemes,"
+"0","  tidyverse,"
+"0","  janitor,"
+"0","  magrittr,"
+"0","  glue,"
+"0","  lubridate,"
+"0","  haven,"
+"0","  snakecase,"
+"0","  sandwich,"
+"0","  lmtest,"
+"0","  gganimate,"
+"0","  gapminder,"
+"0","  stargazer,"
+"0","  snakecase,"
+"0","  mosaicData,"
+"0","  modelr,"
+"0","  rsample,"
+"0","  foreach,"
+"0","  caret,"
+"0","  parallel,"
+"0","  purrr,"
+"0","  pander,"
+"0","  readr,"
+"0","  xtable"
+"0",")"
+"0",""
+"0","here::i_am(""R/include.R"")"
+"2","here() starts at /Users/abbyjohnson/Desktop/UT/Statistical Learning/exercises-2
+"
+"0","capmetro_UT <- read_csv(here(""data/capmetro_UT.csv""))"
+"1","[1mRows: [22m[34m5824[39m [1mColumns: [22m[34m8[39m
+"
+"1","[36m──[39m [1mColumn specification[22m [36m────────────────────────────────────────────────────────────────────────────[39m
+[1mDelimiter:[22m "",""
+[31mchr[39m  (3): day_of_week, month, weekend
+[32mdbl[39m  (4): boarding, alighting, temperature, hour_of_day
+[34mdttm[39m (1): timestamp
+"
+"1","
+[36mℹ[39m Use [38;5;235m[48;5;253m[38;5;235m[48;5;253m`spec()`[48;5;253m[38;5;235m[49m[39m to retrieve the full column specification for this data.
+[36mℹ[39m Specify the column types or set [38;5;235m[48;5;253m[38;5;235m[48;5;253m`show_col_types = FALSE`[48;5;253m[38;5;235m[49m[39m to quiet this message.
+"
+"0","data(SaratogaHouses)"
+"0","german_credit <- read_csv(here(""data/german_credit.csv""))"
+"2","New names:
+* `` -> ...1
+"
+"1","[1mRows: [22m[34m1000[39m [1mColumns: [22m[34m23[39m
+"
+"1","[36m──[39m [1mColumn specification[22m [36m────────────────────────────────────────────────────────────────────────────[39m
+[1mDelimiter:[22m "",""
+[31mchr[39m (13): checkingstatus1, history, purpose, savings, employ, status, others, property, otherpla...
+[32mdbl[39m  (9): ...1, Default, duration, amount, installment, residence, age, cards, liable
+[33mlgl[39m  (1): rent
+"
+"1","
+[36mℹ[39m Use [38;5;235m[48;5;253m[38;5;235m[48;5;253m`spec()`[48;5;253m[38;5;235m[49m[39m to retrieve the full column specification for this data.
+[36mℹ[39m Specify the column types or set [38;5;235m[48;5;253m[38;5;235m[48;5;253m`show_col_types = FALSE`[48;5;253m[38;5;235m[49m[39m to quiet this message.
+"
+"0","hotels_dev <- read_csv(here(""data/hotels_dev.csv""))"
+"1","[1mRows: [22m[34m45000[39m [1mColumns: [22m[34m22[39m
+"
+"1","[36m──[39m [1mColumn specification[22m [36m────────────────────────────────────────────────────────────────────────────[39m
+[1mDelimiter:[22m "",""
+[31mchr[39m   (9): hotel, meal, market_segment, distribution_channel, reserved_room_type, assigned_room_...
+[32mdbl[39m  (12): lead_time, stays_in_weekend_nights, stays_in_week_nights, adults, children, is_repeat...
+[34mdate[39m  (1): arrival_date
+"
+"1","
+[36mℹ[39m Use [38;5;235m[48;5;253m[38;5;235m[48;5;253m`spec()`[48;5;253m[38;5;235m[49m[39m to retrieve the full column specification for this data.
+[36mℹ[39m Specify the column types or set [38;5;235m[48;5;253m[38;5;235m[48;5;253m`show_col_types = FALSE`[48;5;253m[38;5;235m[49m[39m to quiet this message.
+"
+"0","hotels_val <- read_csv(here(""data/hotels_val.csv""))"
+"1","[1mRows: [22m[34m4999[39m [1mColumns: [22m[34m22[39m
+"
+"1","[36m──[39m [1mColumn specification[22m [36m────────────────────────────────────────────────────────────────────────────[39m
+[1mDelimiter:[22m "",""
+[31mchr[39m   (9): hotel, meal, market_segment, distribution_channel, reserved_room_type, assigned_room_...
+[32mdbl[39m  (12): lead_time, stays_in_weekend_nights, stays_in_week_nights, adults, children, is_repeat...
+[34mdate[39m  (1): arrival_date
+"
+"1","
+[36mℹ[39m Use [38;5;235m[48;5;253m[38;5;235m[48;5;253m`spec()`[48;5;253m[38;5;235m[49m[39m to retrieve the full column specification for this data.
+[36mℹ[39m Specify the column types or set [38;5;235m[48;5;253m[38;5;235m[48;5;253m`show_col_types = FALSE`[48;5;253m[38;5;235m[49m[39m to quiet this message.
+"
