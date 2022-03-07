@@ -99,7 +99,7 @@ their loan.
 
 <table>
 <caption>
-**Logit Model Estimates For Predicting Default Probability**
+Logit Model Estimates For Predicting Default Probability
 </caption>
 <thead>
 <tr>
