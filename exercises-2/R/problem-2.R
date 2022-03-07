@@ -19,11 +19,14 @@ saratoga_split = initial_split(SaratogaHouses, prop = 0.8)
 saratoga_train = training(saratoga_split)
 saratoga_test = testing(saratoga_split)
 
+lm2 = lm(price ~ . - pctCollege - sewer - waterfront - landValue - newConstruction, data=saratoga_train)
+
 lm = lm(price ~ (. -pctCollege - heating - heating_hotair - fuel - fuel_oil - sewer - sewer_none +(bedrooms*lotSize)), data=saratoga_train)
 
 coef(lm) %>% round(0)
 
-rmse(lm, saratoga_test)
+rmse(lm2, saratoga_test)
+rmse(lm, saratoga_test) ## linear model outperforms medium model
 
 K_folds = 10
 SaratogaHouses = SaratogaHouses %>%
@@ -40,24 +43,6 @@ modelr::rmse(lm, data=filter(SaratogaHouses, fold_id == fold))
 lm_rmse_cv
 mean(lm_rmse_cv) 
 sd(lm_rmse_cv)/sqrt(K_folds) 
-
-
-SaratogaHouses_folds = crossv_kfold(SaratogaHouses, k=K_folds)
-
-k_grid = c(2, 4, 6, 8, 10, 15, 20, 25, 30, 35, 40, 45,
-           50, 60, 70, 80, 90, 100, 125, 150, 175, 200, 250, 300)
-
-lm_cv_grid = foreach(k = k_grid, .combine='rbind') %dopar% {
-  models = map(SaratogaHouses_folds$train, ~ lm(price ~ (. -pctCollege - heating - heating_hotair - fuel - fuel_oil - sewer - sewer_none +(bedrooms*lotSize)), data = ., use.all=FALSE))
-  errs = map2_dbl(models, SaratogaHouses_folds$test, modelr::rmse)
-  c(k=k,err = mean(errs), std_err = sd(errs)/sqrt(K_folds))
-} %>% as.data.frame
-
-lm_cv_grid_plot = ggplot(lm_cv_grid) + 
-  geom_point(aes(x=k, y=err)) + 
-  geom_errorbar(aes(x=k, ymin = err-std_err, ymax = err+std_err)) + 
-  scale_x_log10()
-lm_cv_grid_plot
 
 ########################
 SaratogaHouses_standardized = SaratogaHouses %>%

@@ -14,21 +14,29 @@
 
 ![](figures/capmetroplot1-1.png)
 
-Give the figure an informative caption in which you explain what is
-shown in the figure and address the following questions, citing evidence
-from the figure. Does the hour of peak boardings change from day to day,
-or is it broadly similar across days? Why do you think average boardings
-on Mondays in September look lower, compared to other days and months?
-Similarly, why do you think average boardings on Weds/Thurs/Fri in
-November look lower?
+From the figure above, we can see how UT CapMetro ridership changes by
+hour, day of week, and month (Sep, Oct, Nov). We can see that the peak
+boarding hour is about the same for all weekdays, but is much lower on
+the weekends. This makes sense when we consider UT class times, and
+students’ demand (or lack-thereof) for a ride to campus on the weekends.
+Additionally, average boardings on Mondays in September are lower, which
+is likely due to the Monday university closure in observance of Labor
+Day in September. Moreover, we can see the average boardings on
+Wed/Thurs/Fri are lower in November for a similar reason. The university
+closes Wed/Thurs/Fri of Thanksgiving week, so there is likely to be
+almost no riders on the UT CapMetro routes for those days in November.
 
 <br>
 
 ![](figures/capmetroplot2-1.png)
 
-When we hold hour of day and weekend status constant, does temperature
-seem to have a noticeable effect on the number of UT students riding the
-bus?
+From the figure above, we can see how UT CapMetro ridership changes
+across temperature, hour of the day, and weekdays/weekends. When we hold
+hour of the day and weekend status constant, temperature does not seem
+to have a noticeable effect on student ridership. Within each hour of
+the day, we can see that ridership has a fairly flat correlation with
+temperature, which suggests there is no relationship between temperature
+and UT bus ridership.
 
 <br>
 
@@ -36,21 +44,41 @@ bus?
 
 <br>
 
-**Cross-validated RMSE for linear model:**
+In order to build the best predictive model of house prices in Saratoga,
+NY, we can compare the performance of a linear model and a KNN model.
+Using various characteristics that describe the house and property, each
+model estimates what the price of an individual house should be. Then,
+each model’s out-of-sample performance is cross-validated, in order to
+account for random variation in the data. With these cross-validated
+out-of-sample performance measures, we can decide which model is better
+at estimating house price.
 
-    ## [1] 58057.2
+<br>
 
-**Cross-validated RMSE for KNN model:**
+**Cross-validated RMSE for best linear model:**
 
-    ## [1] 70153.26
+    ## [1] 58182.29
 
-Which model seems to do better at achieving lower out-of-sample
-mean-squared error? Write a report on your findings as if you were
-describing your price-modeling strategies for a local taxing authority,
-who needs to form predicted market values for properties in order to
-know how much to tax them. Keep the main focus on the conclusions and
-model performance; any relevant technical details should be put in an
-appendix.
+<br>
+
+**Cross-validated RMSE for best KNN model:**
+
+    ## [1] 70001.6
+
+<br>
+
+We can see that the linear model proves to be better at predicting house
+price, because it has a significantly lower out-of-sample RMSE than the KNN model. The
+difference between these two RMSE estimates is about 11,800. This means
+that the linear model is $11,800 closer in its prediction of the true
+house price. This number is very large when you consider how much
+potential tax revenue comes from $11,800. For example, if a local
+property tax rate is 1.5%, $11,800 generates almost $200 of revenue.
+Multiply that by just 2,000 homes in a county, and that becomes $400,000
+of tax revenue that is potentially over or under-estimated. As a local
+taxing authority, it is vital to mitigate this type of revenue
+estimation error, therefore, the linear model proves to be the best
+predictive choice.
 
 <br>
 
@@ -58,7 +86,12 @@ appendix.
 
 <br>
 
-![](figures/credit_propplot-1.png)
+![](figures/credit_propplot-1.png) From the figure above, we can see the
+calculated probability of loan default for each type of credit history.
+Those with ‘good’ credit history are far more likely to default on their
+loan than those with ‘poor’ or ‘terrible’ credit history. Moreover,
+those with ‘terrible’ credit history are the least likely to default on
+their loan.
 
 <br>
 
@@ -293,16 +326,95 @@ German
 </tbody>
 </table>
 
-What do you notice about the history variable vis-a-vis predicting
-defaults? What do you think is going on here? In light of what you see
-here, do you think this data set is appropriate for building a
-predictive model of defaults, if the purpose of the model is to screen
-prospective borrowers to classify them into “high” versus “low”
-probability of default? Why or why not—and if not, would you recommend
-any changes to the bank’s sampling scheme?
+From the logit regression estimates above, we can see how credit history
+is estimated to effect the probability of loan default. Similar to the
+first bar plot, the logit coefficients tell us that individuals with
+‘poor’ history are less likely to default than those with ‘good’
+history, and those with ‘terrible’ history are the least likely to
+default of all credit history groups.
+
+<br>
+
+Based on the results of this data, I do not think this data set is
+appropriate for building a predictive model of defaults. Individuals
+with ‘good’ credit histories should be the least likely to default on
+their loans, while those with ‘terrible’ history should be the most
+likely to default on their loans. Individuals with ‘good’ credit are
+more likely to be offered a loan in the first place, which means there
+inevitably were more loans with ‘good’ credit history in the
+retrospective data collection. This means that ‘good’ credit loans will
+have artificially high default rates, and ‘terrible’ credit loans will
+have artificially low default rates. Additionally, there was no
+randomization in the default status of the retrospective data
+collection, which eliminates any natural variation.
+
+<br>
+
+In an effort to improve the bank’s sampling scheme, I would recommend
+taking a large random sample of loans from the bank’s overall portfolio
+and bootstrapping the sample in order to get more accurate estimates of
+loan default probability. Therefore, the bank won’t over-sample defaults
+with ‘good’ history and maintain random variation.
 
 <br>
 
 ### 4) Model building and validation: Children and hotel reservations
+
+<br>
+
+#### **Model Building**
+
+<br>
+
+**Compare Out-of-Sample Performance**
+
+
+*Best Linear Model* ![](figures/best_linear-1.png)
+
+<br>
+
+Using deviance as a measure of out-of-sample performance, the best
+linear model achieves a binomial deviance lower than the baseline 1
+model, and marginally lower than the baseline 2 model.
+
+<br>
+
+#### **Model Validation: Step 1**
+
+<br>
+
+Using the best linear model and the validation data set, I calculated
+the True Positive Rate (Sensitivity) and the False Positive Rate
+(Specificity) for the predictions of the children variable. With these
+two measurements, I created a ROC curve as seen below.
+
+<br>
+
+![](figures/validation_2-1.png)
+
+<br>
+
+#### **Model Validation: Step 2**
+
+<br>
+
+After creating 20 folds in the validation data set, I predicted whether
+each booking would have children on it, and then estimated the total
+expected number of bookings with children for each fold. Then, I
+compared these predictions with the actual number of bookings with
+children for each fold, and calculated the True Positive Rate (TRP).
+
+<br>
+
+The mean TPR across all folds was about 26%. This means that the among
+booking with children on it, the model correctly predicted 26% as having
+children. The plot below summarizes the TRP for all 20 folds. We can see
+that the TRP ranges from a little less than 10% up to almost 40% in fold
+number 9.
+
+    ##     meanTPR
+    ## 1 0.2495956
+
+![](figures/validation_3-1.png)
 
 <br>

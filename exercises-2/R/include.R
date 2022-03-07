@@ -34,7 +34,12 @@ librarian::shelf(
   purrr,
   pander,
   readr,
-  xtable
+  xtable,
+  gamlr,
+  CVXR,
+  pROC,
+  ROCR,
+  fastDummies
 )
 
 # tell here where we are so we can use it elsewhere
