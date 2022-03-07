@@ -86,7 +86,9 @@ predictive choice.
 
 <br>
 
-![](figures/credit_propplot-1.png) From the figure above, we can see the
+![](figures/credit_propplot-1.png) 
+
+From the figure above, we can see the
 calculated probability of loan default for each type of credit history.
 Those with ‘good’ credit history are far more likely to default on their
 loan than those with ‘poor’ or ‘terrible’ credit history. Moreover,
