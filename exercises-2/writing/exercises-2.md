@@ -18,7 +18,7 @@ From the figure above, we can see how UT CapMetro ridership changes by
 hour, day of week, and month (Sep, Oct, Nov). We can see that the peak
 boarding hour is about the same for all weekdays, but is much lower on
 the weekends. This makes sense when we consider UT class times, and
-students’ demand (or lack-thereof) for a ride to campus on the weekends.
+students’demand (or lack-thereof) for a ride to campus on the weekends.
 Additionally, average boardings on Mondays in September are lower, which
 is likely due to the Monday university closure in observance of Labor
 Day in September. Moreover, we can see the average boardings on
@@ -49,28 +49,26 @@ NY, we can compare the performance of a linear model and a KNN model.
 Using various characteristics that describe the house and property, each
 model estimates what the price of an individual house should be. Then,
 each model’s out-of-sample performance is cross-validated, in order to
-account for random variation in the data. With these cross-validated
+account random variation in the data. With these cross-validated
 out-of-sample performance measures, we can decide which model is better
 at estimating house price.
 
-<br>
-
 **Cross-validated RMSE for best linear model:**
 
-    ## [1] 58182.29
+    ## [1] 58400.21
 
 <br>
 
 **Cross-validated RMSE for best KNN model:**
 
-    ## [1] 70001.6
+    ## [1] 70077.83
 
 <br>
 
 We can see that the linear model proves to be better at predicting house
-price, because it has a significantly lower out-of-sample RMSE than the KNN model. The
+price, because it has a significantly lower out-of-sample RMSE. The
 difference between these two RMSE estimates is about 11,800. This means
-that the linear model is $11,800 closer in its prediction of the true
+that the linear model $11,800 closer in their predictions of the true
 house price. This number is very large when you consider how much
 potential tax revenue comes from $11,800. For example, if a local
 property tax rate is 1.5%, $11,800 generates almost $200 of revenue.
@@ -86,9 +84,7 @@ predictive choice.
 
 <br>
 
-![](figures/credit_propplot-1.png) 
-
-From the figure above, we can see the
+![](figures/credit_propplot-1.png) From the figure above, we can see the
 calculated probability of loan default for each type of credit history.
 Those with ‘good’ credit history are far more likely to default on their
 loan than those with ‘poor’ or ‘terrible’ credit history. Moreover,
@@ -99,7 +95,7 @@ their loan.
 
 <table>
 <caption>
-Logit Model Estimates For Predicting Default Probability
+**Logit Model Estimates For Predicting Default Probability**
 </caption>
 <thead>
 <tr>
@@ -364,12 +360,15 @@ with ‘good’ history and maintain random variation.
 
 <br>
 
-#### **Model Building**
+<br>
+
+##### Model Building
 
 <br>
 
 **Compare Out-of-Sample Performance**
 
+<br>
 
 *Best Linear Model* ![](figures/best_linear-1.png)
 
@@ -381,7 +380,7 @@ model, and marginally lower than the baseline 2 model.
 
 <br>
 
-#### **Model Validation: Step 1**
+##### Model Validation: Step 1
 
 <br>
 
@@ -396,7 +395,7 @@ two measurements, I created a ROC curve as seen below.
 
 <br>
 
-#### **Model Validation: Step 2**
+##### Model Validation: Step 2
 
 <br>
 
@@ -408,14 +407,14 @@ children for each fold, and calculated the True Positive Rate (TRP).
 
 <br>
 
-The mean TPR across all folds was about 26%. This means that the among
-booking with children on it, the model correctly predicted 26% as having
-children. The plot below summarizes the TRP for all 20 folds. We can see
-that the TRP ranges from a little less than 10% up to almost 40% in fold
-number 9.
+The mean TPR across all folds was about 25%. This means that among the
+bookings with children on it, the model correctly predicted 25% as
+having children. The plot below summarizes the TRP for all 20 folds. We
+can see that the TRP ranges from a little less than 10% up to almost 40%
+in fold number 9.
 
     ##     meanTPR
-    ## 1 0.2495956
+    ## 1 0.2518314
 
 ![](figures/validation_3-1.png)
 
