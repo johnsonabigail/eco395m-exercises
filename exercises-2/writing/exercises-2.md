@@ -360,12 +360,6 @@ with ‘good’ history and maintain random variation.
 
 <br>
 
-<br>
-
-##### Model Building
-
-<br>
-
 **Compare Out-of-Sample Performance**
 
 <br>
@@ -380,7 +374,7 @@ model, and marginally lower than the baseline 2 model.
 
 <br>
 
-##### Model Validation: Step 1
+#### Model Validation: Step 1
 
 <br>
 
@@ -395,7 +389,7 @@ two measurements, I created a ROC curve as seen below.
 
 <br>
 
-##### Model Validation: Step 2
+#### Model Validation: Step 2
 
 <br>
 
@@ -410,8 +404,7 @@ children for each fold, and calculated the True Positive Rate (TRP).
 The mean TPR across all folds was about 25%. This means that among the
 bookings with children on it, the model correctly predicted 25% as
 having children. The plot below summarizes the TRP for all 20 folds. We
-can see that the TRP ranges from a little less than 10% up to almost 40%
-in fold number 9.
+can see that the TRP ranges from a little less than 10% up to about 50%.
 
     ##     meanTPR
     ## 1 0.2518314
