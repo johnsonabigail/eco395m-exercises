@@ -360,8 +360,6 @@ with ‘good’ history and maintain random variation.
 
 <br>
 
-<br>
-
 ##### Model Building
 
 <br>
