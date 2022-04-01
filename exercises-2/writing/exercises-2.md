@@ -374,7 +374,7 @@ model, and marginally lower than the baseline 2 model.
 
 <br>
 
-##### Model Validation: Step 1
+#### Model Validation: Step 1
 
 <br>
 
@@ -389,7 +389,7 @@ two measurements, I created a ROC curve as seen below.
 
 <br>
 
-##### Model Validation: Step 2
+#### Model Validation: Step 2
 
 <br>
 
