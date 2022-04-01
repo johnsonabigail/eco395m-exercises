@@ -360,10 +360,6 @@ with ‘good’ history and maintain random variation.
 
 <br>
 
-##### Model Building
-
-<br>
-
 **Compare Out-of-Sample Performance**
 
 <br>
