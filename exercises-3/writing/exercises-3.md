@@ -248,7 +248,7 @@ visualize how accurate the predictions are.
 From the model results, we can see that the random forest tree model
 performed the best with the lowest RMSE. From this model, we can
 visualize the predicted median house values (Figure2) in comparison to
-the true median house values (Figure 1). From these figures, we can see
+the true median house values (Figure 1). In general, we can see that as we move from West to East, house values tend to descrease. In other words, houses on the coast of California have higher house values, on average, than houses further inland. This makes sense when we consider the large coastal cities in California, and the premium paid to live near the ocean. From these figures, we can see
 that the distribution of the predicted values are very close to the true
 values. The predicted values only seem to undervalue houses along the
 coast of California in the Bay Area and near Los Angeles. Moreover,
