@@ -1,0 +1,441 @@
+---
+title: "exercises-3"
+author: "Abby Johnson"
+date: "4/1/2022"
+output: md_document
+---
+
+```{r setup, include=FALSE}
+if (!("librarian" %in% rownames(utils::installed.packages()))) {
+  utils::install.packages("librarian")
+}
+
+# put all of the packages that you import here
+librarian::shelf( 
+  cran_repo = "https://cran.microsoft.com/", # Dallas, TX
+  ask = FALSE,
+  stats, # https://stackoverflow.com/questions/26935095/r-dplyr-filter-not-masking-base-filter#answer-26935536
+  here,
+  kableExtra,
+  rlang,
+  ggthemes,
+  tidyverse,
+  janitor,
+  magrittr,
+  glue,
+  lubridate,
+  haven,
+  snakecase,
+  sandwich,
+  lmtest,
+  gganimate,
+  gapminder,
+  stargazer,
+  snakecase,
+  mosaicData,
+  modelr,
+  rsample,
+  foreach,
+  caret,
+  parallel,
+  purrr,
+  pander,
+  readr,
+  xtable,
+  gamlr,
+  CVXR,
+  pROC,
+  ROCR,
+  fastDummies, 
+  randomForest, 
+  gbm, 
+  pdp,
+  rpart,
+  ggmap
+)
+
+# tell here where we are so we can use it elsewhere
+here::i_am("R/include.R")
+
+CAhousing <- read_csv(here("data/CAhousing.csv"), col_names = TRUE)
+dengue <- read_csv(here("data/dengue.csv"), col_names = TRUE)
+greenbuildings <- read_csv(here("data/greenbuildings.csv"), col_names = TRUE)
+```
+
+```{r globaloptions, include=FALSE}
+knitr::opts_chunk$set(fig.path = 'figures/')
+```
+
+<br>
+
+### Exercises 3 
+#### Abby Johnson
+#### 4/6/22
+
+<br>
+
+### 1) What Causes What?
+
+<br>
+
+(**Based on [this podcast from Planet Money.](https://www.npr.org/sections/money/2013/04/23/178635250/episode-453-what-causes-what)**)
+
+<br>
+
+**1. Why can’t I just get data from a few different cities and run the regression of “Crime” on “Police” to understand how more cops in the streets affect crime?* (“Crime” refers to some measure of crime rate and “Police” measures the number of cops in a city.)**
+
+correlation, covariance/variance, independence
+
+We can't run a simple regression of "Crime" on "Police" to understand how more cops in the street affect crime, because crime is highly correlated with the number of police. For example, in areas with consistently high crime rates, there will be an influx of police present. However, we may still see crime increase in this area. The crime rate often predicts the number of cops, so we cannot separate the effect that police has on crime. 
+
+**2. How were the researchers from UPenn able to isolate this effect? Briefly describe their approach and discuss their result in the “Table 2” below, from the researchers' paper.**
+
+The researchers at UPenn were able to isolate this effect using an indicator of terrorist threat in a city. When a city is under a "high alert" of terrorist threat, the number of cops in the streets increases. This increase in police force is completely uncorrelated with street crime, therefore it makes a good instrument for police force in the model. With the high alert variable, we can see the relationship between crime and the number of cops on the street, regardless of the street crime already present. 
+
+As shown in "Table 2" below, the high alert variable has a significant negative relationship with crime, both by itself and controlling for Metro ridership. Therefore, we can see that an increase of cops on the street does in fact correlate to lower levels of crime.
+
+![Table 2](ex3table2.png)
+
+**3. Why did they have to control for Metro ridership? What was that trying to capture?**
+
+omitted variable bias 
+
+The researchers had to control for Metro ridership, because they wanted to make sure that the number of potential victims of street crime remained constant despite a terrorist alert. The researchers considered that a high alert of terrorist threat may reduce the number of people on the street, and therefore reduce the amount of crime. Comparing Metro ridership across all levels of terrorist alerts helps the researchers understand if civilian presence is the true cause of a decrease in crime. 
+
+**From "Table 4" below, describe the model being estimated in the first column? What is the conclusion?**
+
+The model in the first coloumn of "Table 4" below, estimates if an increase in cops affects crime differently in District 1 compared to all of the other districts when controlling for Metro ridership. From the table results, we can see that there does seem to be a significantly different effect in District 1 compared to the other districts. District 1 has a significant negative estimate, while the other districts have a statistically insignificant negative relationship. 
+
+![Table 4](ex3table4.png)
+
+
+<br>
+
+### 2) Tree Modeling: Dengue Cases
+
+<br>
+
+In order to predict dengue cases in Puerto Rico and Peru, we compare a CART, random forest, and gradient-boosted tree model, all of which using city, season, specific humidity, average temperature, and amount of precipitation as controls. Then, each model's out-of-sample performance, or RMSE, is compared to decide which model is best.  
+
+While we could use a log transformation for the total number of dengue cases, tree models are fairly robust to skewed distributions of features in the dataset. Moreover, maintaining total cases in the model, instead of log cases, helps the model predictions and results be more intuitive in their interpretation. 
+
+<br>
+
+```{r problem2, include=FALSE}
+dengue = dummy_cols(dengue)
+dengue_split = initial_split(dengue, prop = 0.8)
+dengue_train = training(dengue_split)
+dengue_train= na.omit(dengue_train)
+dengue_test = testing(dengue_split)
+dengue_test = na.omit(dengue_test)
+
+#CART
+dengue_tree = rpart(total_cases~city_iq + season_fall + season_spring + season_summer + specific_humidity + avg_temp_k + precipitation_amt, data=dengue_train,
+                   control = rpart.control(cp = 0.00001))
+
+plotcp(dengue_tree)
+printcp(dengue_tree)
+
+#pick smallest function whose CV is within 1 se
+cp_1se = function(my_tree) {
+  out = as.data.frame(my_tree$cptable)
+  thresh = min(out$xerror + out$xstd)
+  cp_opt = max(out$CP[out$xerror <= thresh])
+  cp_opt
+}
+
+cp_1se(dengue_tree)
+
+# prune tree to 1se
+prune_1se = function(my_tree) {
+  out = as.data.frame(my_tree$cptable)
+  thresh = min(out$xerror + out$xstd)
+  cp_opt = max(out$CP[out$xerror <= thresh])
+  prune(my_tree, cp=cp_opt)
+}
+
+dengue_tree_prune = prune_1se(dengue_tree)
+
+#out-of-sample performance
+CART_RMSE = rmse(dengue_tree_prune, dengue_test)
+
+#Random Forest
+
+dengue_forest = randomForest(total_cases~city_iq + season_fall + season_spring + season_summer + specific_humidity + avg_temp_k + precipitation_amt,
+                           data=dengue_train, importance = TRUE)
+
+RandomForest_RMSE = modelr::rmse(dengue_forest, dengue_test) 
+
+
+#Gradient-boosted tree
+
+dengue_boost = gbm(total_cases~city_iq + season_fall + season_spring + season_summer + specific_humidity + avg_temp_k + precipitation_amt, 
+             data = dengue_train,
+             interaction.depth=4, n.trees=500, shrinkage=.05)
+
+yhat_test_gbm = predict(dengue_boost, dengue_test, n.trees=350)
+
+BoostedTree_RMSE = rmse(dengue_boost, dengue_test)
+
+#RMSE Comparison 
+CART_RMSE
+RandomForest_RMSE
+BoostedTree_RMSE
+
+# Partial dependence plots 
+pdp_humidity = partial(dengue_forest, pred.var = "specific_humidity", plot=TRUE, plot.engine = "ggplot2")+ labs(x="Specific Humidity",y="Predicted Cases", title="Partial Dependence on Specific Humidity")
+
+pdp_precip = partial(dengue_forest, pred.var = "precipitation_amt", plot=TRUE, plot.engine = "ggplot2")+ labs(x="Precipitation Amount",y="Predicted Cases", title="Partial Dependence on Precipitation Amount")
+
+pdp_temp = partial(dengue_forest, pred.var = "avg_temp_k", plot=TRUE, plot.engine = "ggplot2")+ labs(x="Average Temperature",y="Predicted Cases", title="Partial Dependence on Average Temperature")
+
+```
+
+<br>
+
+##### RMSE Comparison
+```{r rmse, echo=FALSE}
+CART_RMSE
+RandomForest_RMSE
+BoostedTree_RMSE
+```
+
+<br>
+
+From the RMSE estimates, we can see that the random forest model was best at predicted dengue cases, because it has the lowest out-of-sample performance. Now, let's look at some partial dependence plots from our random forest model. 
+
+<br>
+
+##### Partial Dependence Plots 
+```{r pdp1, echo=FALSE}
+plot(pdp_humidity)
+plot(pdp_precip)
+plot(pdp_temp)
+```
+
+<br>
+
+From these partial dependence plots, we can see that as humidity increases and passes a certain threshold, dengue cases rapidly increase. Likewise, as precipitation and temperature increase, the number of dengue cases rapidly increases. 
+
+<br>
+
+### 3) Predictive Model Building: Green Certification
+
+<br>
+
+#### Overview 
+As energy efficient and "green" construction increases in popularity, it is important to understand how this type of construction affects revenues for property owners. In an effort to analyze this relationship, we should build a model to predict how green status affects revenue per square foot per calendar year, controlling for other building characteristics. 
+
+#### Data & Model 
+I use data containing information on 7,894 commercial rental properties from across the United States, 685 of which have been awarded either LEED or EnergyStar certification as a green building. The dataset also includes various information such as size of building, leasing rate, and amenities. 
+
+In order to predict revenue per square foot per calendar year, a new variable needs to be created. Therefore, I created a new variable "rent", which is the product of the rent charged to tenants in the building and the leasing rate. 
+
+I ran CART, random forest, and gradient-boosted tree models. I choose tree models for this dataset, because they are robust to interactions between features and this dataset is likely to include various interactions between building characteristics. For example, energy costs likely interact with size of building. So, tree models limit the need to explicitly include interactions in the model.
+
+Each model is a regression tree model of rent onto all variables in the dataset other than "Rent (per tenant)", "leasing_rate", "LEED", "Energystar". Because these variables provide similar information to other variables in the dataset (green rating and rent), I chose to drop these variables from the model in order to limit over-fitting.
+
+
+#### Results 
+
+<br>
+
+```{r problem3, include=FALSE}
+greenbuildings = greenbuildings %>%
+  mutate(rent = Rent * leasing_rate/100)
+greenbuildings_split = initial_split(greenbuildings, prop = 0.8)
+greenbuildings_train = training(greenbuildings_split)
+greenbuildings_train= na.omit(greenbuildings_train)
+greenbuildings_test = testing(greenbuildings_split)
+greenbuildings_test = na.omit(greenbuildings_test)
+
+# CART
+greenbuildings_tree = rpart(rent~ (. -Rent -leasing_rate -LEED -Energystar), data=greenbuildings_train,
+                            control = rpart.control(cp = 0.00001))
+
+#plotcp(greenbuildings_tree)
+#printcp(greenbuildings_tree)
+
+cp_1se = function(my_tree) {
+  out = as.data.frame(my_tree$cptable)
+  thresh = min(out$xerror + out$xstd)
+  cp_opt = max(out$CP[out$xerror <= thresh])
+  cp_opt
+}
+
+cp_1se(greenbuildings_tree)
+
+prune_1se = function(my_tree) {
+  out = as.data.frame(my_tree$cptable)
+  thresh = min(out$xerror + out$xstd)
+  cp_opt = max(out$CP[out$xerror <= thresh])
+  prune(my_tree, cp=cp_opt)
+}
+
+greenbuildings_tree_prune = prune_1se(greenbuildings_tree)
+
+#out-of-sample performance
+CART_RMSE = rmse(greenbuildings_tree_prune, greenbuildings_test)
+
+# Random Forest
+greenbuildings_forest = randomForest(rent~ (. -Rent -leasing_rate -LEED -Energystar), 
+                                     data=greenbuildings_train, importance = TRUE)
+
+RandomForest_RMSE = modelr::rmse(greenbuildings_forest, greenbuildings_test)  # a lot lower!
+#plot(greenbuildings_forest)
+
+# Gradient-boosted tree
+greenbuildings_boost = gbm(rent~ (. -Rent -leasing_rate -LEED -Energystar), 
+                           data = greenbuildings_train,
+                           interaction.depth=4, n.trees=500, shrinkage=.05)
+
+gbm.perf(greenbuildings_boost)
+yhat_test_gbm = predict(greenbuildings_boost, greenbuildings_test, n.trees=350)
+BoostedTree_RMSE = rmse(greenbuildings_boost, greenbuildings_test)
+
+## RMSE Comparison
+CART_RMSE
+RandomForest_RMSE
+BoostedTree_RMSE
+
+# plots 
+pdp_greenrating = partial(greenbuildings_forest, pred.var = "green_rating", plot=TRUE, plot.engine = "ggplot2")+ labs(x="Green Rating",y="PredictRent Revenue", title="Partial Dependence on Green Rating")
+```
+
+
+##### Out-of-Sample Performance Comparison
+```{r RMSE_1, echo=FALSE}
+CART_RMSE
+RandomForest_RMSE
+BoostedTree_RMSE
+```
+
+##### Rand Forest Partial Dependence Plot 
+```{r pdp2, echo=FALSE}
+plot(pdp_greenrating)
+```
+
+#### Conclusion
+Based on the results of the models, the random forest model performed the best with the lowest RMSE. Looking at the partial dependence plot of rent revenue on green rating, we can see that the average change in rental income per square foot increases by about 0.5 for building with a green rating. These results provide evidence that green rated buildings have a higher total revenue from rent. 
+
+<br>
+
+### 4) Predictive Model Building: California Housing
+
+<br>
+
+#### Overview 
+Location is an important factor when considering house value. For example, geographic proximity to certain amenities or natural features can dramatically increase the value of a home. Such is the case for homes in California. In an effort to analyze this relationship for California homes, I built a model to predict how location and other housing characteristics affect median house value. 
+ 
+#### Data & Model 
+I use data containing information at the census-tract level on residential housing in the state of California. The dataset include information on house longitude, latitude, median age, total rooms, total bedrooms, population, households, and median income.
+
+I ran CART, random forest, and gradient-boosted tree models. I choose tree models for this dataset, because they are robust to interactions between features, and this dataset is likely to include various interactions between housing characteristics. For example, total rooms likely interact with total bedrooms. So, tree models limit the need to explicitly include interactions in the model.
+
+Each model is a regression tree model of median house value onto everything in the dataset except "longitude", "latitude", "households", and "population". These excluded variables are objective information about the census tract, and likely don't have much relationship with house value. Therefore, I excluded these variables to limit unnecessary noise or variation in the models.
+
+We can plot the observationsf median house value on a map according to their respective longitude and latitude, to visualize how geographic location may affect house value. Then, we can plot the predictions from the best model on a map to visualize out predictions in comparison to the true values. Likewise, we can plot the residuals of our predictions to visualize how accurate our predictions are. 
+
+#### Results 
+
+```{r problem4, include=FALSE}
+CAhousing_split = initial_split(CAhousing, prop = 0.8)
+CAhousing_train = training(CAhousing_split)
+CAhousing_train= na.omit(CAhousing_train)
+CAhousing_test = testing(CAhousing_split)
+CAhousing_test = na.omit(CAhousing_test)
+
+# CART
+CAhousing_tree = rpart(medianHouseValue ~ (. -longitude-latitude -households-population), data=CAhousing_train,
+                            control = rpart.control(cp = 0.00001))
+plotcp(CAhousing_tree)
+printcp(CAhousing_tree)
+
+cp_1se = function(my_tree) {
+  out = as.data.frame(my_tree$cptable)
+  thresh = min(out$xerror + out$xstd)
+  cp_opt = max(out$CP[out$xerror <= thresh])
+  cp_opt
+}
+
+cp_1se(CAhousing_tree)
+
+prune_1se = function(my_tree) {
+  out = as.data.frame(my_tree$cptable)
+  thresh = min(out$xerror + out$xstd)
+  cp_opt = max(out$CP[out$xerror <= thresh])
+  prune(my_tree, cp=cp_opt)
+}
+
+CAhousing_tree_prune = prune_1se(CAhousing_tree)
+
+CART_RMSE = rmse(CAhousing_tree_prune, CAhousing_test)
+
+# Random forest
+
+CAhousing_forest = randomForest(medianHouseValue~ (. -longitude-latitude -households-population), 
+                                     data=CAhousing_train, importance = TRUE)
+
+RandomForest_RMSE = modelr::rmse(CAhousing_forest, CAhousing_test) 
+plot(CAhousing_forest)
+
+# Gradient-boosted tree
+
+CAhousing_boost = gbm(medianHouseValue~ (. -longitude-latitude -households-population), 
+                           data = CAhousing_train,
+                           interaction.depth=4, n.trees=500, shrinkage=.05)
+gbm.perf(CAhousing_boost)
+yhat_test_gbm = predict(CAhousing_boost, CAhousing_test, n.trees=350)
+
+BoostedTree_RMSE = rmse(CAhousing_boost, CAhousing_test)
+
+## RMSE Comparison 
+CART_RMSE
+RandomForest_RMSE
+BoostedTree_RMSE
+
+
+CAhousing = CAhousing %>%
+  mutate(medianHouseValue_hat = predict(CAhousing_boost, CAhousing), medianHouseValue_residual = (medianHouseValue - medianHouseValue_hat))
+
+plot1 = qmplot(longitude, latitude, data = CAhousing, maptype = "toner-background", color = medianHouseValue) +
+  labs(title = "CA Median House Value by Geographic Location", colour = "Median House Value")
+  
+plot2 = qmplot(longitude, latitude, data = CAhousing, maptype = "toner-background", color = medianHouseValue_hat) +
+  labs(title = "CA Predicted Median House Value by Geographic Location", colour = "Predicted Median House Value")
+
+plot3 = qmplot(longitude, latitude, data = CAhousing, maptype = "toner-background", color = medianHouseValue_residual) +
+  labs(title = "CA Median House Value Predicted Residuals by Geographic Location", colour = "Predicted Residual of Median House Value")
+```
+
+##### Out-of-Sample Performance Comparison
+```{r problem4RMSE, echo=FALSE}
+CART_RMSE
+RandomForest_RMSE
+BoostedTree_RMSE
+```
+
+##### Median House Values, Predictions, and Residuals by Geographic Location
+
+**Figure 1**
+```{r p4_plot1, echo=FALSE}
+plot(plot1)
+```
+
+**Figure 2**
+```{r p4_plot2, echo=FALSE}
+plot(plot2)
+```
+
+**Figure 3**
+```{r p4_plot3, echo=FALSE}
+plot(plot3)
+```
+
+<br>
+
+#### Conclusion
+From the model results, we can see that the gradient-boosted tree model performed the best with the lowest RMSE. From this model, we can use the geographic plots to visualize the predicted median house values (Figure2) in comparison to the true median house values (Figure 1). From these figures, we can see that the distribution of the predicted values are very close to the true values. Moreover, Figure 3 shows the distribution of the predicted residuals, which clearly show low residual estimates on average. 
+
+<br>
+
