@@ -55,13 +55,13 @@ BoostedTree_RMSE
 
 
 CAhousing = CAhousing %>%
-  mutate(medianHouseValue_hat = predict(CAhousing_boost, CAhousing), medianHouseValue_residual = (medianHouseValue - medianHouseValue_hat))
+  mutate(medianHouseValue_hat = predict(CAhousing_forest, CAhousing), medianHouseValue_residual = (medianHouseValue - medianHouseValue_hat))
 
 plot1 = qmplot(longitude, latitude, data = CAhousing, maptype = "toner-background", color = medianHouseValue) +
-  labs(title = "CA Median House Value by Geographic Location", colour = "Median House Value")
+  labs(title = "Figure 1: CA Median House Value by Geographic Location", colour = "Median House Value")
   
 plot2 = qmplot(longitude, latitude, data = CAhousing, maptype = "toner-background", color = medianHouseValue_hat) +
-  labs(title = "CA Predicted Median House Value by Geographic Location", colour = "Predicted Median House Value")
+  labs(title = "Figure 2: CA Predicted Median House Value by Geographic Location", colour = "Predicted Median House Value")
 
 plot3 = qmplot(longitude, latitude, data = CAhousing, maptype = "toner-background", color = medianHouseValue_residual) +
-  labs(title = "CA Median House Value Predicted Residuals by Geographic Location", colour = "Predicted Residual of Median House Value")
+  labs(title = "Figure 3: CA Median House Value Predicted Residuals by Geographic Location", colour = "Predicted Residual of Median House Value")

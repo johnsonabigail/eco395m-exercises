@@ -91,15 +91,13 @@ with a log transformation. Moreover, maintaining total cases in the
 model, instead of log cases, helps the model predictions and results be
 more intuitive in their interpretation.
 
-<br>
-
 ##### RMSE Comparison
 
-    ## [1] 25.91565
+    ## [1] 25.5962
 
-    ## [1] 24.24284
+    ## [1] 21.61656
 
-    ## [1] 25.58477
+    ## [1] 23.62527
 
 From the RMSE estimates, we can see that the random forest model was
 best at predicted dengue cases, because it has the lowest out-of-sample
@@ -107,26 +105,9 @@ performance. Now, let’s look at partial dependence plots from our random
 forest model, to understand the relationship between dengue cases and
 other predictive variables.
 
-<br>
-
 ##### Partial Dependence Plots
 
-    ## Warning: Use of `object[[1L]]` is discouraged. Use `.data[[1L]]` instead.
-
-    ## Warning: Use of `object[["yhat"]]` is discouraged. Use `.data[["yhat"]]`
-    ## instead.
-
-![](figures/pdp1-1.png)
-
-    ## Warning: Use of `object[[1L]]` is discouraged. Use `.data[[1L]]` instead.
-    ## Use of `object[["yhat"]]` is discouraged. Use `.data[["yhat"]]` instead.
-
-![](figures/pdp1-2.png)
-
-    ## Warning: Use of `object[[1L]]` is discouraged. Use `.data[[1L]]` instead.
-    ## Use of `object[["yhat"]]` is discouraged. Use `.data[["yhat"]]` instead.
-
-![](figures/pdp1-3.png)
+![](figures/pdp1-1.png)![](figures/pdp1-2.png)![](figures/pdp1-3.png)
 
 From these partial dependence plots, we can see that as humidity
 increases and passes a certain threshold, dengue cases rapidly increase.
@@ -176,18 +157,13 @@ over-fitting.
 
 ##### Out-of-Sample Performance Comparison
 
-    ## [1] 9.239257
+    ## [1] 9.165364
 
-    ## [1] 6.618858
+    ## [1] 6.867179
 
-    ## [1] 8.594843
+    ## [1] 8.717698
 
 ##### Rand Forest Partial Dependence Plot
-
-    ## Warning: Use of `object[[1L]]` is discouraged. Use `.data[[1L]]` instead.
-
-    ## Warning: Use of `object[["yhat"]]` is discouraged. Use `.data[["yhat"]]`
-    ## instead.
 
 ![](figures/pdp2-1.png)
 
@@ -245,31 +221,31 @@ visualize how accurate the predictions are.
 
 ##### Out-of-Sample Performance Comparison
 
-    ## [1] 58289.23
+    ## [1] 57402.98
 
-    ## [1] 50906.73
+    ## [1] 50580.18
 
-    ## [1] 53608.23
+    ## [1] 53691.45
 
 ##### Median House Values, Predictions, and Residuals by Geographic Location
 
 <br>
 
-**Figure 1** ![](figures/p4_plot1-1.png)
+![](figures/p4_plot1-1.png)
 
 <br>
 
-**Figure 2** ![](figures/p4_plot2-1.png)
+![](figures/p4_plot2-1.png)
 
 <br>
 
-**Figure 3** ![](figures/p4_plot3-1.png)
+![](figures/p4_plot3-1.png)
 
 <br>
 
 #### Conclusion
 
-From the model results, we can see that the gradient-boosted tree model
+From the model results, we can see that the random forest tree model
 performed the best with the lowest RMSE. From this model, we can
 visualize the predicted median house values (Figure2) in comparison to
 the true median house values (Figure 1). From these figures, we can see

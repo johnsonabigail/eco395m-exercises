@@ -5,7 +5,7 @@ date: "4/1/2022"
 output: md_document
 ---
 
-```{r setup, include=FALSE}
+```{r setup, include=FALSE, cache=TRUE}
 if (!("librarian" %in% rownames(utils::installed.packages()))) {
   utils::install.packages("librarian")
 }
@@ -62,7 +62,7 @@ dengue <- read_csv(here("data/dengue.csv"), col_names = TRUE)
 greenbuildings <- read_csv(here("data/greenbuildings.csv"), col_names = TRUE)
 ```
 
-```{r globaloptions, include=FALSE}
+```{r globaloptions, include=FALSE, cache=TRUE}
 knitr::opts_chunk$set(fig.path = 'figures/')
 ```
 
@@ -108,9 +108,8 @@ In order to predict dengue cases in Puerto Rico and Peru, I compare a CART, rand
 
 While I could use a log transformation for the total number of dengue cases, tree models are fairly robust to skewed distributions of features in the dataset, so there may only be marginal improvements of accuracy with a log transformation. Moreover, maintaining total cases in the model, instead of log cases, helps the model predictions and results be more intuitive in their interpretation. 
 
-<br>
 
-```{r problem2, include=FALSE, message=FALSE}
+```{r problem2, include=FALSE, message=FALSE, warning=FALSE, cache=TRUE}
 dengue = dummy_cols(dengue)
 dengue_split = initial_split(dengue, prop = 0.8)
 dengue_train = training(dengue_split)
@@ -181,7 +180,7 @@ pdp_temp = partial(dengue_forest, pred.var = "avg_temp_k", plot=TRUE, plot.engin
 ```
 
 ##### RMSE Comparison
-```{r rmse, echo=FALSE, message=FALSE}
+```{r rmse, echo=FALSE, message=FALSE, cache=TRUE}
 CART_RMSE
 RandomForest_RMSE
 BoostedTree_RMSE
@@ -189,10 +188,9 @@ BoostedTree_RMSE
 
 From the RMSE estimates, we can see that the random forest model was best at predicted dengue cases, because it has the lowest out-of-sample performance. Now, let's look at partial dependence plots from our random forest model, to understand the relationship between dengue cases and other predictive variables. 
 
-<br>
 
 ##### Partial Dependence Plots 
-```{r pdp1, echo=FALSE, message=FALSE}
+```{r pdp1, echo=FALSE, message=FALSE, warning=FALSE, cache=TRUE}
 plot(pdp_humidity)
 plot(pdp_precip)
 plot(pdp_temp)
@@ -219,7 +217,7 @@ Each model is a regression tree model of rent onto all variables in the dataset 
 
 #### Results 
 
-```{r problem3, include=FALSE, message=FALSE}
+```{r problem3, include=FALSE, message=FALSE, cache=TRUE}
 greenbuildings = greenbuildings %>%
   mutate(rent = Rent * leasing_rate/100)
 greenbuildings_split = initial_split(greenbuildings, prop = 0.8)
@@ -282,14 +280,14 @@ pdp_greenrating = partial(greenbuildings_forest, pred.var = "green_rating", plot
 ```
 
 ##### Out-of-Sample Performance Comparison
-```{r RMSE_1, echo=FALSE, message=FALSE}
+```{r RMSE_1, echo=FALSE, message=FALSE, warning=FALSE, cache=TRUE}
 CART_RMSE
 RandomForest_RMSE
 BoostedTree_RMSE
 ```
 
 ##### Rand Forest Partial Dependence Plot 
-```{r pdp2, echo=FALSE, message=FALSE}
+```{r pdp2, echo=FALSE, message=FALSE, warning=FALSE, cache=TRUE}
 plot(pdp_greenrating)
 ```
 
@@ -314,7 +312,7 @@ We can plot the observed median house values on a map according to their respect
 
 #### Results 
 
-```{r problem4, include=FALSE, message=FALSE}
+```{r problem4, include=FALSE, message=FALSE, warning=FALSE, cache=TRUE}
 CAhousing_split = initial_split(CAhousing, prop = 0.8)
 CAhousing_train = training(CAhousing_split)
 CAhousing_train= na.omit(CAhousing_train)
@@ -360,8 +358,6 @@ plot(CAhousing_forest)
 CAhousing_boost = gbm(medianHouseValue~ (. -households-population), 
                            data = CAhousing_train,
                            interaction.depth=4, n.trees=500, shrinkage=.05)
-gbm.perf(CAhousing_boost)
-yhat_test_gbm = predict(CAhousing_boost, CAhousing_test, n.trees=350)
 
 BoostedTree_RMSE = rmse(CAhousing_boost, CAhousing_test)
 
@@ -372,20 +368,20 @@ BoostedTree_RMSE
 
 
 CAhousing = CAhousing %>%
-  mutate(medianHouseValue_hat = predict(CAhousing_boost, CAhousing), medianHouseValue_residual = (medianHouseValue - medianHouseValue_hat))
+  mutate(medianHouseValue_hat = predict(CAhousing_forest, CAhousing), medianHouseValue_residual = (medianHouseValue - medianHouseValue_hat))
 
 plot1 = qmplot(longitude, latitude, data = CAhousing, maptype = "toner-background", color = medianHouseValue) +
-  labs(title = "CA Median House Value by Geographic Location", colour = "Median House Value")
+  labs(title = "Figure 1: CA Median House Value by Geographic Location", colour = "Median House Value")
   
 plot2 = qmplot(longitude, latitude, data = CAhousing, maptype = "toner-background", color = medianHouseValue_hat) +
-  labs(title = "CA Predicted Median House Value by Geographic Location", colour = "Predicted Median House Value")
+  labs(title = "Figure 2: CA Predicted Median House Value by Geographic Location", colour = "Predicted Median House Value")
 
 plot3 = qmplot(longitude, latitude, data = CAhousing, maptype = "toner-background", color = medianHouseValue_residual) +
-  labs(title = "CA Median House Value Predicted Residuals by Geographic Location", colour = "Predicted Residual of Median House Value")
+  labs(title = "Figure 3: CA Median House Value Predicted Residuals by Geographic Location", colour = "Predicted Residual of Median House Value")
 ```
 
 ##### Out-of-Sample Performance Comparison
-```{r problem4RMSE, echo=FALSE, message=FALSE}
+```{r problem4RMSE, echo=FALSE, message=FALSE, cache=TRUE}
 CART_RMSE
 RandomForest_RMSE
 BoostedTree_RMSE
@@ -395,29 +391,26 @@ BoostedTree_RMSE
 
 <br>
 
-**Figure 1**
-```{r p4_plot1, echo=FALSE, message=FALSE}
+```{r p4_plot1, echo=FALSE, message=FALSE, cache=TRUE}
 plot(plot1)
 ```
 
 <br>
 
-**Figure 2**
-```{r p4_plot2, echo=FALSE, message=FALSE}
+```{r p4_plot2, echo=FALSE, message=FALSE, cache=TRUE}
 plot(plot2)
 ```
 
 <br>
 
-**Figure 3**
-```{r p4_plot3, echo=FALSE, message=FALSE}
+```{r p4_plot3, echo=FALSE, message=FALSE, cache=TRUE}
 plot(plot3)
 ```
 
 <br>
 
 #### Conclusion
-From the model results, we can see that the gradient-boosted tree model performed the best with the lowest RMSE. From this model, we can visualize the predicted median house values (Figure2) in comparison to the true median house values (Figure 1). From these figures, we can see that the distribution of the predicted values are very close to the true values. Moreover, Figure 3 shows the distribution of the predicted residuals, which clearly show low residual estimates on average. These figures provide further evidence of the accuracy of this model in predicting median house value. 
+From the model results, we can see that the random forest tree model performed the best with the lowest RMSE. From this model, we can visualize the predicted median house values (Figure2) in comparison to the true median house values (Figure 1). From these figures, we can see that the distribution of the predicted values are very close to the true values. Moreover, Figure 3 shows the distribution of the predicted residuals, which clearly show low residual estimates on average. These figures provide further evidence of the accuracy of this model in predicting median house value. 
 
 <br>
 
