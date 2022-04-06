@@ -250,9 +250,11 @@ performed the best with the lowest RMSE. From this model, we can
 visualize the predicted median house values (Figure2) in comparison to
 the true median house values (Figure 1). From these figures, we can see
 that the distribution of the predicted values are very close to the true
-values. Moreover, Figure 3 shows the distribution of the predicted
-residuals, which clearly show low residual estimates on average. These
-figures provide further evidence of the accuracy of this model in
-predicting median house value.
+values. The predicted values only seem to undervalue houses along the
+coast of California in the Bay Area and near Los Angeles. Moreover,
+Figure 3 shows the distribution of the predicted residuals, which
+clearly show low residual estimates on average. These figures provide
+further evidence of the accuracy of this model in predicting median
+house value.
 
 <br>
