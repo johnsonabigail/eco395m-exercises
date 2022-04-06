@@ -5,7 +5,7 @@ CAhousing_test = testing(CAhousing_split)
 CAhousing_test = na.omit(CAhousing_test)
 
 # CART
-CAhousing_tree = rpart(medianHouseValue ~ (. -longitude-latitude -households-population), data=CAhousing_train,
+CAhousing_tree = rpart(medianHouseValue ~ (. -households-population), data=CAhousing_train,
                             control = rpart.control(cp = 0.00001))
 plotcp(CAhousing_tree)
 printcp(CAhousing_tree)
@@ -32,7 +32,7 @@ CART_RMSE = rmse(CAhousing_tree_prune, CAhousing_test)
 
 # Random forest
 
-CAhousing_forest = randomForest(medianHouseValue~ (. -longitude-latitude -households-population), 
+CAhousing_forest = randomForest(medianHouseValue~ (. -households-population), 
                                      data=CAhousing_train, importance = TRUE)
 
 RandomForest_RMSE = modelr::rmse(CAhousing_forest, CAhousing_test) 
@@ -40,7 +40,7 @@ plot(CAhousing_forest)
 
 # Gradient-boosted tree
 
-CAhousing_boost = gbm(medianHouseValue~ (. -longitude-latitude -households-population), 
+CAhousing_boost = gbm(medianHouseValue~ (. -households-population), 
                            data = CAhousing_train,
                            interaction.depth=4, n.trees=500, shrinkage=.05)
 gbm.perf(CAhousing_boost)
