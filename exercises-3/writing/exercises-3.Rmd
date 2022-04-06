@@ -179,7 +179,7 @@ pdp_temp = partial(dengue_forest, pred.var = "avg_temp_k", plot=TRUE, plot.engin
 
 ```
 
-##### RMSE Comparison
+##### RMSE Comparison (CART, Random Forest, Gradient-boosted)
 ```{r rmse, echo=FALSE, message=FALSE, cache=TRUE}
 CART_RMSE
 RandomForest_RMSE
@@ -279,7 +279,7 @@ BoostedTree_RMSE
 pdp_greenrating = partial(greenbuildings_forest, pred.var = "green_rating", plot=TRUE, plot.engine = "ggplot2")+ labs(x="Green Rating",y="PredictRent Revenue", title="Partial Dependence on Green Rating")
 ```
 
-##### Out-of-Sample Performance Comparison
+##### RMSE Comparison (CART, Random Forest, Gradient-boosted)
 ```{r RMSE_1, echo=FALSE, message=FALSE, warning=FALSE, cache=TRUE}
 CART_RMSE
 RandomForest_RMSE
@@ -292,7 +292,7 @@ plot(pdp_greenrating)
 ```
 
 #### Conclusion
-Based on the results of the models, the random forest model performed the best with the lowest RMSE. Looking at the partial dependence plot of rent revenue on green rating, we can see that the average change in rental income per square foot increases by about 0.5 for building with a green rating. These results provide evidence that green rated buildings have a higher total revenue from rent. 
+Based on the results of the models, the random forest model performed the best with the lowest RMSE. Looking at the partial dependence plot of rent revenue on green rating, we can see that the average change in rental income per square foot increases by about 0.4 for building with a green rating. These results provide evidence that green rated buildings have a higher total revenue from rent. 
 
 <br>
 
@@ -380,7 +380,7 @@ plot3 = qmplot(longitude, latitude, data = CAhousing, maptype = "toner-backgroun
   labs(title = "Figure 3: CA Median House Value Predicted Residuals by Geographic Location", colour = "Predicted Residual of Median House Value")
 ```
 
-##### Out-of-Sample Performance Comparison
+##### RMSE Comparison (CART, Random Forest, Gradient-boosted)
 ```{r problem4RMSE, echo=FALSE, message=FALSE, cache=TRUE}
 CART_RMSE
 RandomForest_RMSE

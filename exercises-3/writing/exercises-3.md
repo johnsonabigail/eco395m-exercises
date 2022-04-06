@@ -91,13 +91,13 @@ with a log transformation. Moreover, maintaining total cases in the
 model, instead of log cases, helps the model predictions and results be
 more intuitive in their interpretation.
 
-##### RMSE Comparison
+##### RMSE Comparison (CART, Random Forest, Gradient-boosted)
 
-    ## [1] 25.5962
+    ## [1] 29.62332
 
-    ## [1] 21.61656
+    ## [1] 27.58068
 
-    ## [1] 23.62527
+    ## [1] 28.5783
 
 From the RMSE estimates, we can see that the random forest model was
 best at predicted dengue cases, because it has the lowest out-of-sample
@@ -107,7 +107,7 @@ other predictive variables.
 
 ##### Partial Dependence Plots
 
-![](figures/pdp1-1.png)![](figures/pdp1-2.png)![](figures/pdp1-3.png)
+![](exercises-3_files/figure-markdown_strict/pdp1-1.png)![](exercises-3_files/figure-markdown_strict/pdp1-2.png)![](exercises-3_files/figure-markdown_strict/pdp1-3.png)
 
 From these partial dependence plots, we can see that as humidity
 increases and passes a certain threshold, dengue cases rapidly increase.
@@ -155,24 +155,24 @@ over-fitting.
 
 #### Results
 
-##### Out-of-Sample Performance Comparison
+##### RMSE Comparison (CART, Random Forest, Gradient-boosted)
 
-    ## [1] 9.165364
+    ## [1] 10.17621
 
-    ## [1] 6.867179
+    ## [1] 8.258768
 
-    ## [1] 8.717698
+    ## [1] 9.63983
 
 ##### Rand Forest Partial Dependence Plot
 
-![](figures/pdp2-1.png)
+![](exercises-3_files/figure-markdown_strict/pdp2-1.png)
 
 #### Conclusion
 
 Based on the results of the models, the random forest model performed
 the best with the lowest RMSE. Looking at the partial dependence plot of
 rent revenue on green rating, we can see that the average change in
-rental income per square foot increases by about 0.5 for building with a
+rental income per square foot increases by about 0.4 for building with a
 green rating. These results provide evidence that green rated buildings
 have a higher total revenue from rent.
 
@@ -219,27 +219,27 @@ visualize how accurate the predictions are.
 
 #### Results
 
-##### Out-of-Sample Performance Comparison
+##### RMSE Comparison (CART, Random Forest, Gradient-boosted)
 
-    ## [1] 57402.98
+    ## [1] 61061.1
 
-    ## [1] 50580.18
+    ## [1] 52835.73
 
-    ## [1] 53691.45
+    ## [1] 56015.97
 
 ##### Median House Values, Predictions, and Residuals by Geographic Location
 
 <br>
 
-![](figures/p4_plot1-1.png)
+![](exercises-3_files/figure-markdown_strict/p4_plot1-1.png)
 
 <br>
 
-![](figures/p4_plot2-1.png)
+![](exercises-3_files/figure-markdown_strict/p4_plot2-1.png)
 
 <br>
 
-![](figures/p4_plot3-1.png)
+![](exercises-3_files/figure-markdown_strict/p4_plot3-1.png)
 
 <br>
 
