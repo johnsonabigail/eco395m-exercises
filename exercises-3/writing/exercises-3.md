@@ -172,7 +172,7 @@ over-fitting.
 Based on the results of the models, the random forest model performed
 the best with the lowest RMSE. Looking at the partial dependence plot of
 rent revenue on green rating, we can see that the average change in
-rental income per square foot increases by about 0.4 for building with a
+rental income per square foot increases by about 0.6 for building with a
 green rating. These results provide evidence that green rated buildings
 have a higher total revenue from rent.
 
