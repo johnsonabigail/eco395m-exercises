@@ -18,8 +18,6 @@ red and white wine and their individual chemical makeup and quality
 rating, how can we methodologically distinguish the red from the white
 wine and the low-quality from the high-quality wine?
 
-<br>
-
 #### **PCA**
 
 First, let’s try Principal Component Analysis (PCA) to distinguish the
@@ -104,14 +102,14 @@ property and average quality rating for each color of wine.
 </table>
 
 When we look at the correlation of components from this average summary,
-we can visualize which groups of components are similar to each
-other.
+we can visualize which groups of components are similar to each other.
 
 <br>
 
-![](figures/corrplot-1.png) We can clearly see a perfect correlation
-between two groups of wine components. So, the chemical components
-do seem to distinct groups.
+![](figures/corrplot-1.png)
+
+We can clearly see a perfect correlation between two groups of wine
+components. So, the chemical components do seem to distinct groups.
 
 When we run the PCA analysis, we get two distinct principal component
 groups (as seen below).
@@ -227,9 +225,8 @@ chemical properties or quality.
 <br>
 
 Now, we can use principal component regression to better analyze the
-differentiating power of PCA.
-
-First, we can regress wine quality onto PC1 and PC2, and get:
+differentiating power of PCA. First, we can regress wine quality onto
+PC1 and PC2, and get:
 
 <table>
 <caption>
@@ -314,9 +311,9 @@ PC2 is dropped from the model due to multiocollinearity in the model.
 This is to be expected considering the chemical properties were
 perfectly correlated with each other. This regression analysis tells us
 that a positive association with PC1 is predicted to decrease quality,
-on average, by about 0.049 units at a statistically significant level. Red wine is more positively associated
+on average, by about 0.049 units. Red wine is more positively associated
 with PC1 and has a slightly lower average quality than white wine, so
-these regression results makes sense.
+this regression makes sense.
 
 <br>
 
@@ -406,8 +403,6 @@ increase the probability a bottle of wine is red by about 20%. Once
 again, this is consistent with our previous analysis of the principal
 components for each color of wine.
 
-<br>
-
 Based on the principal component regression analysis, this
 dimensionality reduction technique appears to be successful in
 differentiating color and quality of wine.
@@ -434,15 +429,18 @@ color and/or quality of the wine.
 
 <br>
 
-![](figures/clusterplot1-1.png) We can clearly see that no cluster
-clearly identifies a certain group of wine quality.
+![](figures/clusterplot1-1.png)
+
+We can clearly see that no cluster clearly identifies a certain group of
+wine quality.
 
 <br>
 
-![](figures/clusterplot2-1.png) Once again, no cluster clearly
-identifies a certain color of wine. So, this provides evidence to
-clustering’s ineffectiveness in differentiating the wine by color and
-quality.
+![](figures/clusterplot2-1.png)
+
+Once again, no cluster clearly identifies a certain color of wine. So,
+this provides evidence to clustering’s ineffectiveness in
+differentiating the wine by color and quality.
 
 <br>
 
@@ -456,8 +454,6 @@ Understanding the target audience of a product is crucial to developing
 successful online-advertising campaigns. Such is the case for
 NutrientH20, a large consumer drinks brand. How can we identify and
 better reach the biggest NutrientH20 customer groups?
-
-<br>
 
 #### **Data & Model**
 
@@ -483,34 +479,38 @@ learning technique automatically groups users into different clusters
 based on similarities in user content. Then, each cluster can be
 analyzed to identify each NutrientH20 customer group.
 
-<br>
-
 #### **Results**
 
-First, we let's understand how many users are in each cluster:
+First, we can see how many users are in each cluster:
 
     ##    1    2    3    4 
     ## 4347  499   40   67
 
 We can clearly see that Cluster 1 is the biggest customer group.
 
-Now, we can inspect the average amounts of the top content categories
-for each cluster.
+Now, qithin each cluster, we can rank each content category from highest
+to lowest average count. This ranking can help identify the primary
+interests of each group.
 
-![](figures/clust1plot-1.png) Cluster 1, the largest customer group,
-posts content mostly related to health/nutrition and general chatter.
+![](figures/clust1plot-1.png)
 
-![](figures/clust2plot-1.png) Cluster 2, the second largest customer
-group, is mostly interested in content related to sports(fandom for a
-sport/team) and religion.
+Cluster 1, the largest customer group, posts content mostly related to
+health/nutrition and general chatter.
 
-![](figures/clust4plot-1.png) Cluster 4, the third largest customer
-group, is mostly interested in content related to cooking and fashion.
+![](figures/clust2plot-1.png)
 
-![](figures/clust3plot-1.png) Meanwhile, Cluster 3, the smallest
-customer group, is mostly interested in politics and travel.
+Cluster 2, the second largest customer group, is mostly interested in
+content related to sports(fandom for a sport/team) and religion.
 
-<br>
+![](figures/clust4plot-1.png)
+
+Cluster 4, the third largest customer group, is mostly interested in
+content related to cooking and fashion.
+
+![](figures/clust3plot-1.png)
+
+Meanwhile, Cluster 3, the smallest customer group, is mostly interested
+in politics and travel.
 
 #### **Conclusion**
 
@@ -520,7 +520,7 @@ two largest customer group make up about 98% of the total customer
 sample, so NutrientH20 should really hone in on the few key interests of
 the two largest clusters.
 
-The largest NutrientH20 audience is users focused on their health
+The largest NutrientH20 audience for is users focused on their health
 and nutrition and who are likely active on social media (a large
 interest in chatter). The next biggest NutrientH20 audience is users
 interested in sports and religion. So, with a focus on health/nutrition,
@@ -531,8 +531,6 @@ better reach its customer base through online-marketing messages.
 
 ### 3) Association rules for grocery purchases
 
-<br>
-
 #### **Overview**
 
 Can we define association rules for grocery shopping? How does picking
@@ -540,8 +538,6 @@ on item affect the probability of putting another item in your shopping
 cart? We can define association rules for these relationships to
 understand how certain buying behavior increases the probability of
 future behavior.
-
-<br>
 
 #### **Data & Model**
 
@@ -555,18 +551,18 @@ relationships, we can better understand what products are most
 frequently purchased, and the probability of what other products will be
 purchased in addition.
 
-<br>
-
 #### **Results**
 
 Looking at a two-key plot of the grocery baskets for each shopper, we
-can understand the spread of support, confidence, and lift:
+can understand the spread of support, confidence, and lift of each item
+relationship in the dataset:
 
-![](figures/p3_plot-1.png) Looking at the plot, we can see that most
-support is starts at about 0.02 and increases from there, and the
-confidence starts at around 0.1 and increases. These levels of
-confidence and support will serve as parameter thresholds for the
-association rules.
+![](figures/p3_plot-1.png)
+
+Looking at the plot, we can see that most support is starts at about
+0.02 and increases from there, and the confidence starts at around 0.1
+and increases. These levels of confidence and support will serve as
+parameter thresholds for the association rules.
 
 Using these parameter thresholds, we can define association rules across
 different grocery items, and ultimately build a network of
@@ -576,8 +572,6 @@ popular and integral items in the association network. The association
 rules with the highest lift, are items in relation to these three
 products. For example, the association of a shopper that bought butter
 then buying whole milk has a lift of about 2-2.25.
-
-<br>
 
 #### **Conclusion**
 

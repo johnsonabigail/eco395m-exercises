@@ -256,7 +256,6 @@ cluster_color_plot = ggplot(D2) + geom_bar(aes(x=X1, fill=factor(z))) +labs(x="C
 
 The *vinho verde* wine from northern Portugal is formulated from 11 different chemical properties. Using data from 6500 different bottles of red and white wine and their individual chemical makeup and quality rating, how can we methodologically distinguish the red from the white wine and the low-quality from the high-quality wine? 
 
-<br>
 
 #### **PCA**
 First, let's try Principal Component Analysis (PCA) to distinguish the different bottles of wine among the data. When we group the data by the color of wine, we can summarize the average amount of each chemical property and average quality rating for each color of wine. 
@@ -287,6 +286,7 @@ When we look at the correlation of components from this average summary, we can 
 ```{r corrplot, echo=FALSE}
 ggcorrplot::ggcorrplot(cor(wine_results), hc.order = TRUE)
 ```
+
 We can clearly see a perfect correlation
 between two groups of wine components. So, the chemical components do seem to distinct groups. 
 
@@ -326,9 +326,7 @@ We can see that PC1 is positively associated with red wine, indicating that PC1 
 
 <br>
 
-Now, we can use principal component regression to better analyze the differentiating power of PCA. 
-
-First, we can regress wine quality onto PC1 and PC2, and get:
+Now, we can use principal component regression to better analyze the differentiating power of PCA. First, we can regress wine quality onto PC1 and PC2, and get:
 
 ```{r glm1, echo=FALSE}
 lm1
@@ -343,8 +341,6 @@ Then, we can regress wine color onto PC1 and PC2, and get:
 lm2
 ```
 This tells us that a positive association with PC1 is predicted to increase the probability a bottle of wine is red by about 20%. Once again, this is consistent with our previous analysis of the principal components for each color of wine. 
-
-<br>
 
 Based on the principal component regression analysis, this dimensionality reduction technique appears to be successful in differentiating color and quality of wine. 
 
@@ -366,6 +362,7 @@ Specifically, we can analyze if clusters clearly distinguish between color and/o
 ```{r clusterplot1, echo=FALSE}
 plot(cluster_quality_plot)
 ```
+
 We can clearly see that no cluster clearly identifies a certain group of wine quality. 
 
 <br>
@@ -373,6 +370,7 @@ We can clearly see that no cluster clearly identifies a certain group of wine qu
 ```{r clusterplot2, echo=FALSE}
 plot(cluster_color_plot)
 ```
+
 Once again, no cluster clearly identifies a certain color of wine. So, this provides evidence to clustering's ineffectiveness in differentiating the wine by color and quality. 
 
 <br>
@@ -491,16 +489,12 @@ clust4_plot = ggplot(head(clust4_cat)) + geom_col(aes(x=category, y=average_coun
 #### **Overview**
 Understanding the target audience of a product is crucial to developing successful online-advertising campaigns. Such is the case for NutrientH20, a large consumer drinks brand. How can we identify and better reach the biggest NutrientH20 customer groups?
 
-<br>
-
 #### **Data & Model** 
 In order understand the online-advertising customer base, NutrientH20's advertising team took a sample of the brand's Twitter followers and collected each user's posts("tweets") over a seven day period in June 2014. Then, every post was examined by a human annotator contracted through Amazon's Mechanical Turk service. Each tweet was categorized based on its content using a pre-specified scheme of 36 different categories, each representing a broad area of interest (e.g. politics, sports, family, etc.). 
 
 Three of the 36 different tweet categories indicate a certain form of uninformative content: chatter, spam, and adult(adult content). In order to mitigate the bias of these uninformative categories, I only kept users with zero spam or adult content and only average levels of chatter. After filtering and cleaning, the data contains information on about 5,000 NutrientH20 Twitter followers. 
 
 To differentiate each user into an identifiable customer group based on their Twitter content, I used hierarchical clustering. This unsupervised learning technique automatically groups users into different clusters based on similarities in user content. Then, each cluster can be analyzed to identify each NutrientH20 customer group. 
-
-<br>
 
 #### **Results**
 First, we can see how many users are in each cluster:
@@ -509,29 +503,31 @@ summary(factor(cluster2))
 ```
 We can clearly see that Cluster 1 is the biggest customer group. 
 
-Now, we can inspect the average amounts of the top content categories for each cluster. 
+Now, qithin each cluster, we can rank each content category from highest to lowest average count. This ranking can help identify the primary interests of each group.
 
 ```{r clust1plot, echo=FALSE}
 plot(clust1_plot)
 ```
+
 Cluster 1, the largest customer group, posts content mostly related to health/nutrition and general chatter. 
 
 ```{r clust2plot, echo=FALSE}
 plot(clust2_plot)
 ```
+
 Cluster 2, the second largest customer group, is mostly interested in content related to sports(fandom for a sport/team) and religion. 
 
 ```{r clust4plot, echo=FALSE}
 plot(clust4_plot)
 ```
+
 Cluster 4, the third largest customer group, is mostly interested in content related to cooking and fashion. 
 
 ```{r clust3plot, echo=FALSE}
 plot(clust3_plot)
 ```
-Meanwhile, Cluster 3, the smallest customer group, is mostly interested in politics and travel. 
 
-<br>
+Meanwhile, Cluster 3, the smallest customer group, is mostly interested in politics and travel. 
 
 #### **Conclusion**
 Based on the category analysis for each cluster, we can identify NutrientH20's biggest customer group and their primary interests. The two largest customer group make up about 98% of the total customer sample, so NutrientH20 should really hone in on the few key interests of the two largest clusters. 
@@ -541,8 +537,6 @@ The largest NutrientH20 audience for is users focused on their health and nutrit
 <br>
 
 ### 3) Association rules for grocery purchases
-
-<br>
 
 ```{r p3, include=FALSE}
 groceries_raw <- read_csv(here("data/groceries.txt"), col_names = FALSE)
@@ -641,28 +635,23 @@ sub1_plot = plot(head(sub1, 100, by='lift'), method='graph')
 #### **Overview**
 Can we define association rules for grocery shopping? How does picking on item affect the probability of putting another item in your shopping cart? We can define association rules for these relationships to understand how certain buying behavior increases the probability of future behavior. 
 
-<br>
-
 #### **Data & Model**
 We have data on about 9,800 different grocery shoppers and every purchased item from their grocery basket. 
 
 In order create associative relationship between the items in a shoppers cart, I use an association rules model to define the support, confidence, and lift between two product purchases. From these relationships, we can better understand what products are most frequently purchased, and the probability of what other products will be purchased in addition.
 
-<br>
-
 #### **Results**
-Looking at a two-key plot of the grocery baskets for each shopper, we can understand the spread of support, confidence, and lift:
+Looking at a two-key plot of the grocery baskets for each shopper, we can understand the spread of support, confidence, and lift of each item relationship in the dataset:
 
 ```{r p3_plot, echo=FALSE}
 plot(twokey_plot)
 ```
+
 Looking at the plot, we can see that most support is starts at about 0.02 and increases from there, and the confidence starts at around 0.1 and increases. These levels of confidence and support will serve as parameter thresholds for the association rules. 
 
 Using these parameter thresholds, we can define association rules across different grocery items, and ultimately build a network of relationships:
 ![](figures/p3_2-1picture.png)
 From the network, we can see that whole milk, other vegetables, and rolls/buns are the most popular and integral items in the association network. The association rules with the highest lift, are items in relation to these three products. For example, the association of a shopper that bought butter then buying whole milk has a lift of about 2-2.25. 
-
-<br>
 
 #### **Conclusion**
 From the network of association rules, we can better understand grocery shopping behavior and how it affects future purchases. The most popular and central items are whole milk, vegetables, and rolls/buns. It makes sense that these products are so integral to the grocery shopping rules, because they are all perishable and frequently consumed items. So, we would expect these items to be on most shoppers' weekly shopping list. Therefore, when shoppers buy these perishable goods, it increases the probability that they are also going to purchase more perishable produce or bread such as butter, fruit, or pastries. 
