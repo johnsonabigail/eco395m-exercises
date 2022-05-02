@@ -23,7 +23,8 @@ wine and the low-quality from the high-quality wine?
 First, let’s try Principal Component Analysis (PCA) to distinguish the
 different bottles of wine among the data. When we group the data by the
 color of wine, we can summarize the average amount of each chemical
-property and average quality rating for each color of wine.
+property and average quality rating for each color of wine (as shown
+below).
 
 <br>
 
@@ -101,17 +102,29 @@ property and average quality rating for each color of wine.
 </tbody>
 </table>
 
-When we look at the correlation of components from this average summary,
-we can visualize which groups of components are similar to each other.
+Some chemical properties seem to have consistent average levels across
+both colors of wine, while some properties seem to have very different
+average levels. The most noteworthy difference across colors of wine, is
+the average level of total sulfur dioxide. Red wine has an average of
+about 46.47 units of total sulfur dioxide, while white wine has an
+average of about 138.36 units.
+
+When we look at the correlation of these chemical components from this
+average summary, we can visualize which groups of components tend to
+have similar/opposite levels.
 
 <br>
 
 ![](figures/corrplot-1.png)
 
 We can clearly see a perfect correlation between two groups of wine
-components. So, the chemical components do seem to distinct groups.
+components. Residual sugar, citric acid, free sulfur dioxide, total
+sulfur dioxide, alcohol, and quality are all perfectly correlated with
+each other. Meanwhile, volatile acidity, fixed acidity, chlorides,
+density, pH, and sulphates are all perfectly correlated with each other.
+So, the chemical components do seem to appear in two distinct groups.
 
-When we run the PCA analysis, we get two distinct principal component
+Moreover, when we run PCA, we get two distinct principal component
 groups (as seen below).
 
 <br>
@@ -313,7 +326,7 @@ perfectly correlated with each other. This regression analysis tells us
 that a positive association with PC1 is predicted to decrease quality,
 on average, by about 0.049 units. Red wine is more positively associated
 with PC1 and has a slightly lower average quality than white wine, so
-this regression makes sense.
+these regression results makes sense.
 
 <br>
 
@@ -399,7 +412,7 @@ NA
 </table>
 
 This tells us that a positive association with PC1 is predicted to
-increase the probability a bottle of wine is red by about 20%. Once
+increase the probability that a bottle of wine is red by about 20%. Once
 again, this is consistent with our previous analysis of the principal
 components for each color of wine.
 
@@ -413,36 +426,46 @@ differentiating color and quality of wine.
 
 Next, let’s analyze the performance of hierarchical clustering in
 differentiating wine color and quality. Using the best performing
-hierarchical clustering method, we can summarize how the data is
-clustered into five different groups:
+hierarchical clustering method (maximum distance), we can summarize how
+the data is clustered into five different groups:
 
     ##    1    2    3    4    5 
     ## 6287  206    2    1    1
 
-The data is clearly clustered mostly into group 1, with some smaller
-numbers as we get to group 5. Now that the data is grouped, we can
-analyze how the clustering method differentiated the data into each
-cluster.
-
-Specifically, we can analyze if clusters clearly distinguish between
-color and/or quality of the wine.
+The data is mostly clustered into group 1, with some decreasing numbers
+as we get to group 5. Because of the uneven spread of data points across
+the clusters, it is unlikely that the clusters represent clear groups of
+different colors or quality of wine. However, now that the data is
+grouped, we can analyze what properties the clustering method used to
+differentiate the data into each cluster. Specifically, we can analyze
+if clusters clearly distinguish between color and/or quality of the
+wine.
 
 <br>
 
 ![](figures/clusterplot1-1.png)
 
-We can clearly see that no cluster clearly identifies a certain group of
-wine quality.
+This plot shows the spread of observations from each cluster across the
+different levels of quality. No cluster appears to adhere to one quality
+of rating (high/low quality), so we can see that no cluster clearly
+differentiates wine by its quality rating.
 
 <br>
 
 ![](figures/clusterplot2-1.png)
 
-Once again, no cluster clearly identifies a certain color of wine. So,
-this provides evidence to clustering’s ineffectiveness in
-differentiating the wine by color and quality.
+This plot shows the spread of observations from each cluster across the
+different colors of wine. Once again, no cluster seems to make a clear
+distinction of one color of wine. While cluster 2 does only appear to be
+red wine, the cluster population isn’t representative of all the bottles
+of red wine in the sample. So, some bottles of red wine may appear in
+one of the other 4 clusters, which don’t differentiate by color.
 
-<br>
+The hierarchical clustering technique does not succeed in accurately
+differentiating groups of wine by their color of their quality.
+Meanwhile, the PCA technique does provide accurate predictions in
+differentiating wine by these characteristics. Therefore, the PCA
+technique makes more sense for this data. <br>
 
 ### 2) Market Segmentation
 
@@ -486,11 +509,19 @@ First, we can see how many users are in each cluster:
     ##    1    2    3    4 
     ## 4347  499   40   67
 
-We can clearly see that Cluster 1 is the biggest customer group.
+We can clearly see that Cluster 1 is the biggest customer group. The
+spread across clusters if fairly uneven, and we can quickly identify
+Cluster 1 and Cluster 2 as being the two largest differentiated customer
+groups.
 
-Now, qithin each cluster, we can rank each content category from highest
+Now, within each cluster, we can rank each content category from highest
 to lowest average count. This ranking can help identify the primary
-interests of each group.
+interests of each group, and help us understand how the customer group
+is differentiated from the rest.
+
+The following plots show the average counts of the top six ranked
+categories for each cluster. From these plots, we can visualize what the
+primary interests are of each group.
 
 ![](figures/clust1plot-1.png)
 
@@ -512,6 +543,9 @@ content related to cooking and fashion.
 Meanwhile, Cluster 3, the smallest customer group, is mostly interested
 in politics and travel.
 
+Each cluster does appear to have unique interests that clearly
+differentiate their customer profile from the rest.
+
 #### **Conclusion**
 
 Based on the category analysis for each cluster, we can identify
@@ -523,9 +557,11 @@ the two largest clusters.
 The largest NutrientH20 audience for is users focused on their health
 and nutrition and who are likely active on social media (a large
 interest in chatter). The next biggest NutrientH20 audience is users
-interested in sports and religion. So, with a focus on health/nutrition,
-social media engagement, sports, and religious ideals, NutrientH20 can
-better reach its customer base through online-marketing messages.
+interested in sports and religion. The combination of these top
+interests suggests a primary customer base comprised of young and active
+consumers. So, with a focus on health/nutrition, social media
+engagement, sports, and religious ideals, NutrientH20 can better reach
+its customer base through online-marketing messages.
 
 <br>
 
